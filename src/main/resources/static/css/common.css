@@ -1,0 +1,112 @@
+html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+a { color: #393E46 !important;}
+
+input[type="radio"],
+input[type="checkbox"] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+    border: 1px solid #102c57;
+}
+
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+    background-color: #102c57;
+}
+
+.container { width: 100%; }
+
+
+/* PC (해상도 1024px)*/
+@media all and (min-width:1024px) {
+    html {font-size: 26px;}
+    .font-s {font-size: 20px;}
+    .font-xs {font-size: 18px;}
+    #test {
+        width: 200px;
+        height: 200px;
+        background-color: gold;
+    }
+}
+
+/* 테블릿 세로 (해상도 768px ~ 1023px)*/
+@media all and (min-width:768px) and (max-width:1023px) { 
+    html {font-size: 24px;}
+    .font-s {font-size: 20px;}
+    .font-xs {font-size: 18px;}
+    .container { max-width: 1020px; }
+    #test {
+        width: 100px;
+        height: 100px;
+        background-color: brown;
+    }
+}
+
+/* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
+@media all and (min-width:480px) and (max-width:767px) {
+    html {font-size: 22px;}
+    .font-s {font-size: 18px;}
+    .font-xs {font-size: 16px;}
+    .container { max-width: 760px; }
+    #test {
+        width: 70px;
+        height: 70px;
+        background-color: wheat;
+    }
+}
+
+/* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
+@media all and (max-width:479px) {
+    html {font-size: 18px;}
+    .font-s {font-size: 14px;}
+    .font-xs {font-size: 12px;}
+    .container { max-width: 475px; }
+    #test {
+        width: 50px;
+        height: 50px;
+        background-color: aqua;
+    }
+}
+
+.input-basic, .select-basic { width: 100%; height: 50px; border: none; border-radius: 10px; background-color: #F2F2F2; }
+.select-basic { padding-left: .5rem !important; }
+
+.button-bw-l { width: 100%; height: 50px; color: white; border: none; border-radius: 30px; background-color: #282828; }
+.button-bw-s { padding: 5px 10px; margin-right: 10px; color: white; border: none; border-radius: 10px;
+    background-color: #282828; }
+
+.required-data { color: red; font-weight: bold; }
+
+.input-btn-container { position: relative; }
+.input-btn-container input { padding-right: 5.5rem !important; }
+.input-btn-container button { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+
+/* 로그인, 회원가입, 아이디 & 비밀번호 찾기 header */
+.mem-header { height: 80px; display: flex; align-items: center; position: relative; }
+.mem-header > span:nth-child(1) { margin-left: 10px; }
+.mem-header > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); }
+
+/* 로그인 */
+.mem-lgoin-div { height: 1px; position: relative; margin: 20px 0; border-bottom: 1px solid lightslategrey; }
+.mem-lgoin-div > span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 0 10px; 
+    color: lightslategrey; background-color: white; }
+
+/* 회원가입 */
+.term-container { position: relative; display: flex; align-items: center; margin-bottom: 1rem !important; }
+.term-container > label { margin-left: .5rem !important; }
+.term-container > span { text-decoration: underline; color: grey; position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%); }
+
+.slide-container { display: flex; width: 100%; transition: transform 0.5s ease; will-change: transform; }
+.slide-wrapper { overflow: hidden; width: 100%; }
+.slide { flex: 0 0 100%; }
+
+.input-email-domain {margin-bottom: .5rem !important; position: relative; }
+.input-email-domain > span { position: absolute; top: 50%; left: 10px; transform: translateY(-50%); pointer-events: none; }
+
+.payment-container { width: 100%; max-width: 330px; height: 200px; background-color: #E8E8E8; border-radius: 25px; position: relative; }
+.payment-container > span:nth-child(1) { font-size: 50px; display: inline-block; position: absolute; left: 50%;
+    transform: translate(-50%, 50%); }
+.payment-container > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); bottom: 20px;
+    min-width: 300px; text-align: center; font-size: 18px; }

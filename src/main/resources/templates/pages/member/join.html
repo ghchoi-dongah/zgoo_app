@@ -1,0 +1,148 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>회원가입</span>
+    </div>
+    <div class="mem-body p-2">
+        <form th:action="@{/join}" method="get" class="slide-container">
+            <div class="slide-wrapper">
+                <div class="slide-container" id="slider">
+                    <!-- 이용약관 -->
+                    <div id="content1" class="slide">
+                        <div>
+                            <div>약관동의</div>
+                            <p class="font-s">아래 약관을 확인 및 동의해 주세요</p>
+                        </div>
+                        <div class="mt-5">
+                            <div class="form-check-s">
+                                <input type="checkbox" id="termsAll">
+                                <label for="termsAll">전체동의</label>
+                            </div>
+                            <hr>
+                            <div class="term-container">
+                                <input type="checkbox" id="terms1">
+                                <label for="terms1">[필수] 개인정보 활용동의서</label>
+                                <span class="font-xs">내용확인</span>
+                            </div>
+                            <div class="term-container">
+                                <input type="checkbox" id="terms2">
+                                <label for="terms2">[필수] 멤버십 서비스 이용약관</label>
+                                <span class="font-xs">내용확인</span>
+                            </div>
+                            <div class="term-container">
+                                <input type="checkbox" id="terms3">
+                                <label for="terms3">[선택] 마케팅 수신 동의</label>
+                                <span class="font-xs">내용확인</span>
+                            </div>
+                            <div class="term-container">
+                                <input type="checkbox" id="terms4">
+                                <label for="terms4">[선택] 이메일 수신 동의</label>
+                                <span class="font-xs">내용확인</span>
+                            </div>
+                            <div class="term-container">
+                                <input type="checkbox" id="terms5">
+                                <label for="terms5">[선택] SMS 수신 동의</label>
+                                <span class="font-xs">내용확인</span>
+                            </div>
+                            <!-- <div class="term-container" th:each="con : ${conList}">
+                                <input type="checkbox" th:id="${con.conditionCode}">
+                                <label th:for="${con.conditionCode}" th:text="|[${con.section}] ${con.conditionName}|"></label>
+                                <span class="font-xs">내용확인</span>
+                            </div> -->
+                        </div>
+                        <button type="button" class="button-bw-l mt-4" onclick="goToNext()">다음</button>
+                    </div>
+                    <!-- 회원정보 입력 -->
+                    <div id="content2" class="slide">
+                        <p>계정정보 확인</p>
+                        <div class="mt-4">
+                            <div>이름<b class="required-data">*</b></div>
+                            <input type="text" class="input-basic font-s ps-2" id="name" placeholder="이름을 입력해 주세요" required>
+                        </div>
+                        <div class="mt-4">
+                            <div>아이디<b class="required-data">*</b></div>
+                            <div class="input-btn-container">
+                                <input type="text" class="input-basic font-s ps-2 pe-5" id="memUserId" placeholder="아이디를 입력해 주세요" required>
+                                <button type="button" class="button-bw-s font-s">중복확인</button>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>비밀번호<b class="required-data">*</b></div>
+                            <input type="password" class="input-basic font-s ps-2 mb-2" id="password" placeholder="8자 이상/영문 대소문자, 숫자, 특수문자" required>
+                            <input type="password" class="input-basic font-s ps-2" id="passwordRe" placeholder="비밀번호 재입력" required>
+                        </div>
+                        <div class="mt-4">
+                            <div>휴대폰번호<b class="required-data">*</b></div>
+                            <div class="input-btn-container">
+                                <input type="number" class="input-basic font-s ps-2 pe-5" id="phone" placeholder="휴대폰번호를 입력해 주세요" required>
+                                <button type="button" class="button-bw-s font-s">인증번호</button>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>인증번호<b class="required-data">*</b></div>
+                            <div class="input-btn-container">
+                                <input type="text" class="input-basic font-s ps-2 pe-5" id="verifiNum" placeholder="인증번호를 입력해 주세요" required>
+                                <button type="button" class="button-bw-s font-s">확인</button>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>이메일<b class="required-data">*</b></div>
+                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="email" placeholder="이메일" required>
+                            <div class="email-domain-container">
+                                <div class="input-email-domain">
+                                    <span>@</span>
+                                    <input type="text" class="input-basic font-s ps-4 pe-5" id="inputDomain" required>
+                                </div>
+                                <select class="select-basic font-s" id="domain">
+                                    <option th:text="직접입력" th:value="''"></option>
+                                    <option th:text="naver.com" th:value="naver.com"></option>
+                                    <option th:text="gmail.com" th:value="gmail.com"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>결제수단 등록<b class="required-data">*</b></div>
+                            <div class="payment-container">
+                                <span><i class="bi bi-plus-circle-fill"></i></span>
+                                <span>대표 결제 카드를 등록해 주세요</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>생년월일<b class="required-data">*</b></div>
+                            <input type="number" class="input-basic font-s ps-2" id="birth" placeholder="ex) 19980128" required>
+                        </div>
+                        <div class="mt-4">
+                            <div>주소<b class="required-data">*</b></div>
+                            <div class="input-btn-container mb-2">
+                                <input type="text" class="input-basic font-s ps-2 pe-5" id="zipcode" readonly required>
+                                <button type="button" class="button-bw-s font-s">우편번호</button>
+                            </div>
+                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="address" readonly required>
+                            <input type="text" class="input-basic font-s ps-2 pe-5" id="addressDetail" placeholder="상세주소를 입력해 주세요" required>
+                        </div>
+                        <div class="mt-4">
+                            <div>차량 번호/모델</div>
+                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="carNum" placeholder="ex) 12가 1234">
+                            <input type="text" class="input-basic font-s ps-2 pe-5" id="model" placeholder="ex) IONIC 6">
+                        </div>
+                        <div class="mt-4">
+                            <div>개인/법인<b class="required-data">*</b></div>
+                            <input type="radio" id="typePB" name="bizType" value="PB" checked>
+                            <label for="typePB">개인</label>
+                            <input type="radio" id="typeCB" name="bizType" value="CB">
+                            <label for="typeCB">법인</label>
+                        </div>
+                        <button type="submit" class="button-bw-l mt-4">가입하기</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function goToNext() {
+            document.getElementById('slider').style.transform = 'translateX(-100%)';
+        }
+    </script>
+</div>
+</html>

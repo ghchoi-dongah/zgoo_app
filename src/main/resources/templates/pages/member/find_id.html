@@ -1,0 +1,31 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>아이디 찾기</span>
+    </div>
+    <div class="mem-body p-2">
+        <form th:action="@{/find-id}" method="get">
+            <div>
+                <div>이름<b class="required-data">*</b></div>
+                <input type="text" class="input-basic font-s ps-2" id="name" placeholder="이름을 입력해 주세요" required>
+            </div>
+            <div class="mt-4">
+                <div>휴대폰번호<b class="required-data">*</b></div>
+                <div class="input-btn-container">
+                    <input type="number" class="input-basic font-s ps-2 pe-5" id="phone" placeholder="휴대폰번호를 입력해 주세요" required>
+                    <button type="button" class="button-bw-s font-s">인증번호</button>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div>인증번호<b class="required-data">*</b></div>
+                <div class="input-btn-container">
+                    <input type="text" class="input-basic font-s ps-2 pe-5" id="verifiNum" placeholder="인증번호를 입력해 주세요" required>
+                    <button type="button" class="button-bw-s font-s">확인</button>
+                </div>
+            </div>
+            <button type="button" class="button-bw-l mt-4">확인</button>
+        </form>
+    </div>
+</div>
+</html>

@@ -1,0 +1,53 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>로그인</span>
+    </div>
+    <div class="mem-body p-2">
+        <form id="loginForm">
+            <div>
+                <div>아이디</div>
+                <input type="text" class="input-basic font-s ps-2" id="memLoginId" name="memLoginId"
+                    placeholder="아이디를 입력해 주세요" required>
+            </div>
+            <div class="mt-4">
+                <div>비밀번호</div>
+                <input type="password" class="input-basic font-s ps-2" id="password" name="password"
+                    placeholder="비밀번호를 입력해 주세요" required>
+            </div>
+            <div class="font-s mt-1 float-end">
+                <span class="me-2"><a th:href="@{/member/find-id}">아이디 찾기</a></span>
+                <span><a th:href="@{/member/find-pw}">비밀번호 찾기</a></span>
+            </div>
+            <button type="submit" id="loginBtn" class="button-bw-l mt-4">로그인</button>
+        </form>
+        <div class="mem-lgoin-div">
+            <span class="font-s">OR</span>
+        </div>
+        <div class="font-s text-center">아직 회원이 아니신가요?<a th:href="@{/member/join}" class="ms-2">회원가입하기</a></div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('errorModal').style.display = 'none';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const response = await fetch('/member/login', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                window.location.href = '/main';
+            } else {
+                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+            }
+        });
+    </script>
+</div>
+</html>
