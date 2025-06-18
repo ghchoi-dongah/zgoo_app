@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import zgoo.app.domain.biz.BizInfo;
 
 @Table(name = "MEMBER")
 @Entity
@@ -62,11 +66,24 @@ public class Member {
     @Column(name = "address_detail")
     private String addressDetail;
 
+    @Column(name = "user_state")
+    private String userState;
+
     @Column(name = "joined_dt")
     private LocalDateTime joinedDt;
 
     @Column(name = "mod_dt")
     private LocalDateTime modDt;
+
+    @Column(name = "creditcard_stat")
+    private String creditcardStat;
+
+    @Column(name = "login_dt")
+    private LocalDateTime loginDt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "biz_id")
+    private BizInfo biz;
 
     public void updateMemberInfo() {
 
@@ -74,5 +91,9 @@ public class Member {
 
     public void updatePasswordInfo(String password) {
         this.password = password;
+    }
+
+    public void updateCreditStatInfo(String creditcardStat) {
+        this.creditcardStat = creditcardStat;
     }
 }

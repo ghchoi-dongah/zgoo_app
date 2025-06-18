@@ -1,4 +1,4 @@
-package zgoo.app.domain.member;
+package zgoo.app.domain.condition;
 
 import java.time.LocalDateTime;
 

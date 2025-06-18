@@ -17,40 +17,41 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import zgoo.app.domain.condition.ConditionCode;
+import zgoo.app.dto.member.MemberDto.MemberCarDto;
 
-@Table(name = "MEMBER_CONDITION")
+@Table(name = "MEMBER_CAR")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class MemberCondition {
+public class MemberCar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "condition_id")
+    @Column(name = "memcar_id")
     private Long id;
 
-    @Column(name = "agree_yn")
-    private String agreeYn;
+    @Column(name = "car_num")
+    private String carNum;
 
-    @Column(name = "agree_version")
-    private String agreeVersion;
+    @Column(name = "car_type")
+    private String carType;
 
-    @Column(name = "agree_dt")
-    private LocalDateTime agreeDt;
+    @Column(name = "model")
+    private String model;
+
+    @Column(name = "reg_dt")
+    private LocalDateTime regDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "condition_code")
-    private ConditionCode condition;
-
-    // public void updateMemberConditionInfo() {
-
-    // }
+    public void updateMemberCarInfo(MemberCarDto dto) {
+        this.carNum = dto.getCarNum();
+        this.carType = dto.getCarType();
+        this.model = dto.getModel();
+    }
 }

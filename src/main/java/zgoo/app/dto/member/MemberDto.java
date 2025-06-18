@@ -20,7 +20,6 @@ public class MemberDto {
     @EqualsAndHashCode
     @NoArgsConstructor
     public static class MemberBaseDto {
-        private Long companyId;
         private Long memberId;
         private Long bizId;
         private String bizType;
@@ -30,6 +29,12 @@ public class MemberDto {
         private String phoneNo;
         private String idTag;
         private String email;
+        private String birth;
+        private String zipCode;
+        private String address;
+        private String addressDetail;
+        private String userState;
+        private String creditcardStat;
     }
 
     @Data
@@ -39,12 +44,6 @@ public class MemberDto {
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class MemberRegDto extends MemberBaseDto {
-        private String birth;
-        private String zipCode;
-        private String address;
-        private String addressDetail;
-        private String userState;
-        private String creditcardStat;
 
         // 결제카드 정보
         private List<MemberCreditCardDto> card;
@@ -94,11 +93,14 @@ public class MemberDto {
     @Builder
     public static class MemberConditionDto {
         private String conditionCode;
+        private String conditionName;
+        private String agreeVersion;
+        private String sectionName;
+        private String section;
+
         private String agreeYn;
         private String agreeYnCheck;
-        private String section;
-        private String agreeVersion;
-        private String conditionCodeName;
+        private String stringAgreeDt;
         private LocalDateTime agreeDt;
     }
 }

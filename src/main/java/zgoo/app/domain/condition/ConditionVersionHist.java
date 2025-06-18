@@ -1,4 +1,4 @@
-package zgoo.app.domain.member;
+package zgoo.app.domain.condition;
 
 import java.time.LocalDateTime;
 
@@ -17,40 +17,46 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import zgoo.app.domain.condition.ConditionCode;
 
-@Table(name = "MEMBER_CONDITION")
+@Table(name = "CONDITION_VERSION_HIST")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class MemberCondition {
+public class ConditionVersionHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "condition_id")
+    @Column(name = "condition_version_id")
     private Long id;
 
-    @Column(name = "agree_yn")
-    private String agreeYn;
+    @Column(name = "version", nullable = false)
+    private String version;
 
-    @Column(name = "agree_version")
-    private String agreeVersion;
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
 
-    @Column(name = "agree_dt")
-    private LocalDateTime agreeDt;
+    @Column(name = "original_name", nullable = false)
+    private String originalName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @Column(name = "stored_name", nullable = false)
+    private String storedName;
+
+    @Column(name = "memo")
+    private String memo;
+
+    @Column(name = "reg_dt")
+    private LocalDateTime regDt;
+
+    @Column(name = "apply_dt")
+    private LocalDateTime applyDt;
+
+    @Column(name = "apply_yn")
+    private String applyYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "condition_code")
     private ConditionCode condition;
-
-    // public void updateMemberConditionInfo() {
-
-    // }
 }

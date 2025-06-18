@@ -17,40 +17,37 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import zgoo.app.domain.condition.ConditionCode;
 
-@Table(name = "MEMBER_CONDITION")
+@Table(name = "MEMBER_CREDITCARD")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class MemberCondition {
+public class MemberCreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "condition_id")
+    @Column(name = "memcreditcard_id")
     private Long id;
 
-    @Column(name = "agree_yn")
-    private String agreeYn;
+    @Column(name = "tid")
+    private String tid;
 
-    @Column(name = "agree_version")
-    private String agreeVersion;
+    @Column(name = "card_num")
+    private String cardNum;
 
-    @Column(name = "agree_dt")
-    private LocalDateTime agreeDt;
+    @Column(name = "fn_code")
+    private String fnCode;
+
+    @Column(name = "representative_card")
+    private String representativeCard;
+
+    @Column(name = "reg_dt")
+    private LocalDateTime regDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "condition_code")
-    private ConditionCode condition;
-
-    // public void updateMemberConditionInfo() {
-
-    // }
 }
