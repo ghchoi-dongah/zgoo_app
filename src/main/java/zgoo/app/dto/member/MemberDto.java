@@ -46,7 +46,7 @@ public class MemberDto {
     public static class MemberRegDto extends MemberBaseDto {
 
         // 결제카드 정보
-        private List<MemberCreditCardDto> card;
+        private MemberCreditCardDto card;
 
         // 차량 정보
         private List<MemberCarDto> car;

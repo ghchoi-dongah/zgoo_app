@@ -45,7 +45,7 @@ public class Member {
     @Column(name = "biz_type", nullable = false)
     private String bizType;
 
-    @Column(name = "phon_no")
+    @Column(name = "phone_no")
     private String phoneNo;
 
     @Column(name = "id_tag", unique = true, nullable = false, length = 16)

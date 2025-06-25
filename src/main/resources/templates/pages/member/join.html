@@ -5,144 +5,212 @@
         <span>회원가입</span>
     </div>
     <div class="mem-body p-2">
-        <form th:action="@{/join}" method="get" class="slide-container">
+        <form id="joinForm" th:action="@{/join}" method="get">
             <div class="slide-wrapper">
                 <div class="slide-container" id="slider">
                     <!-- 이용약관 -->
-                    <div id="content1" class="slide">
+                    <div id="content1" class="slide active">
                         <div>
                             <div>약관동의</div>
                             <p class="font-s">아래 약관을 확인 및 동의해 주세요</p>
                         </div>
                         <div class="mt-5">
                             <div class="form-check-s">
-                                <input type="checkbox" id="termsAll">
+                                <input type="checkbox" id="termsAll" onclick="allChecked()">
                                 <label for="termsAll">전체동의</label>
                             </div>
                             <hr>
-                            <div class="term-container">
-                                <input type="checkbox" id="terms1">
-                                <label for="terms1">[필수] 개인정보 활용동의서</label>
+                            <div class="term-container" th:each="con : ${conList}">
+                                <input type="checkbox" class="checkbox-terms" th:id="|${con.section}-${con.conditionCode}|"
+                                    th:value="${con.agreeVersion}">
+                                <label th:for="|${con.section}-${con.conditionCode}|" th:text="|[${con.sectionName}] ${con.conditionName}|"></label>
+                                <input type="text" class="term-agreedt" th:id="|agreeDt${con.conditionCode}|" hidden>
                                 <span class="font-xs">내용확인</span>
                             </div>
-                            <div class="term-container">
-                                <input type="checkbox" id="terms2">
-                                <label for="terms2">[필수] 멤버십 서비스 이용약관</label>
-                                <span class="font-xs">내용확인</span>
-                            </div>
-                            <div class="term-container">
-                                <input type="checkbox" id="terms3">
-                                <label for="terms3">[선택] 마케팅 수신 동의</label>
-                                <span class="font-xs">내용확인</span>
-                            </div>
-                            <div class="term-container">
-                                <input type="checkbox" id="terms4">
-                                <label for="terms4">[선택] 이메일 수신 동의</label>
-                                <span class="font-xs">내용확인</span>
-                            </div>
-                            <div class="term-container">
-                                <input type="checkbox" id="terms5">
-                                <label for="terms5">[선택] SMS 수신 동의</label>
-                                <span class="font-xs">내용확인</span>
-                            </div>
-                            <!-- <div class="term-container" th:each="con : ${conList}">
-                                <input type="checkbox" th:id="${con.conditionCode}">
-                                <label th:for="${con.conditionCode}" th:text="|[${con.section}] ${con.conditionName}|"></label>
-                                <span class="font-xs">내용확인</span>
-                            </div> -->
                         </div>
-                        <button type="button" class="button-bw-l mt-4" onclick="goToNext()">다음</button>
+                        <button type="button" class="button-bw-l bottom-btn" id="slideBtn1" onclick="goToNext(1)" disabled>다음</button>
+                    </div>
+                    <!-- 회원 유형 선택 -->
+                    <div id="content2" class="slide">
+                        <div style="flex: 1; padding-bottom: 60px !important;">
+                            <p>회원 유형 선택</p>
+                            <div class="mt-4 px-2 radio-space-between">
+                                <input type="text" id="bizType" value="PB" hidden>
+                                <div>
+                                    <input type="radio" id="typePB" name="radioMemType" value="PB" checked>
+                                    <label for="typePB">개인 회원</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="typeCB" name="radioMemType" value="CB">
+                                    <label for="typeCB">법인 회원</label>
+                                </div>
+                            </div>
+                            <div class="mt-2" id="bizContent" style="display: none;">
+                                <input type="text" class="form-control font-s mt-2 mb-2 input-readonly" id="bizName"
+                                    placeholder="법인명을 검색하면 자동 입력됩니다" autocomplete="off" disabled>
+                                <input type="text" id="bizId" hidden>
+                                <div class="input-search">
+                                    <span onclick="findBizList()"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control font-s mt-2" id="searchBizName" placeholder="법인명을 입력해 주세요"
+                                        autocomplete="off">
+                                </div>
+                                <div class="biz-search-container font-s" id="bizList"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="button-bw-l bottom-btn" id="slideBtn2" onclick="goToNext(2)">다음</button>
                     </div>
                     <!-- 회원정보 입력 -->
-                    <div id="content2" class="slide">
-                        <p>계정정보 확인</p>
+                    <div id="content3" class="slide">
+                        <div>
+                            <div>계정정보 확인</div>
+                            <p class="font-s" id="memType">개인 회원</p>
+                        </div>
                         <div class="mt-4">
                             <div>이름<b class="required-data">*</b></div>
-                            <input type="text" class="input-basic font-s ps-2" id="name" placeholder="이름을 입력해 주세요" required>
+                            <input type="text" class="form-control font-s mt-2" id="name" placeholder="이름을 입력해 주세요" autocomplete="off" required>
                         </div>
                         <div class="mt-4">
                             <div>아이디<b class="required-data">*</b></div>
                             <div class="input-btn-container">
-                                <input type="text" class="input-basic font-s ps-2 pe-5" id="memUserId" placeholder="아이디를 입력해 주세요" required>
-                                <button type="button" class="button-bw-s font-s">중복확인</button>
+                                <input type="text" class="form-control font-s mt-2 pe-5" id="memLoginId" placeholder="아이디를 입력해 주세요"
+                                    autocomplete="off" required>
+                                <button type="button" class="button-bw-s font-s" id="idCheckBtn">중복확인</button>
                             </div>
+                            <div class="font-xs invalid-data" id="isValidId">- 영문자로 시작하고 6~20자의 영문자 및 숫자로 구성되어야 합니다.</div>
+                            <div class="font-xs invalid-data" id="invalidId">- 사용할 수 없는 아이디입니다.</div>
+                            <div class="font-xs valid-data" id="validId">- 사용 가능한 아이디입니다.</div>
                         </div>
                         <div class="mt-4">
                             <div>비밀번호<b class="required-data">*</b></div>
-                            <input type="password" class="input-basic font-s ps-2 mb-2" id="password" placeholder="8자 이상/영문 대소문자, 숫자, 특수문자" required>
-                            <input type="password" class="input-basic font-s ps-2" id="passwordRe" placeholder="비밀번호 재입력" required>
+                            <input type="password" class="form-control font-s mt-2 mb-2" id="password" placeholder="8자 이상/영문 대소문자, 숫자, 특수문자"
+                                autocomplete="off" required>
+                            <input type="password" class="form-control font-s mt-2" id="rePassword" placeholder="비밀번호 재입력" autocomplete="off"
+                                required>
+                            <div class="font-xs invalid-data" id="isValidPw">- 8~16자의 영문자, 숫자, 특수문자를 최소 하나씩 포함해야 합니다.</div>
+                            <div class="font-xs invalid-data" id="invalidPw">- 비밀번호가 일치하지 않습니다.</div>
                         </div>
                         <div class="mt-4">
                             <div>휴대폰번호<b class="required-data">*</b></div>
                             <div class="input-btn-container">
-                                <input type="number" class="input-basic font-s ps-2 pe-5" id="phone" placeholder="휴대폰번호를 입력해 주세요" required>
+                                <input type="number" class="form-control font-s mt-2 pe-5" id="phoneNo" placeholder="'-'없이 연속으로 입력"
+                                    autocomplete="off" oninput="maxLengthNum(this, 11)" required>
                                 <button type="button" class="button-bw-s font-s">인증번호</button>
                             </div>
                         </div>
                         <div class="mt-4">
                             <div>인증번호<b class="required-data">*</b></div>
                             <div class="input-btn-container">
-                                <input type="text" class="input-basic font-s ps-2 pe-5" id="verifiNum" placeholder="인증번호를 입력해 주세요" required>
+                                <input type="text" class="form-control font-s mt-2 pe-5" id="verifiNum" placeholder="인증번호를 입력해 주세요"
+                                    autocomplete="off" required>
                                 <button type="button" class="button-bw-s font-s">확인</button>
                             </div>
                         </div>
                         <div class="mt-4">
                             <div>이메일<b class="required-data">*</b></div>
-                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="email" placeholder="이메일" required>
-                            <div class="email-domain-container">
-                                <div class="input-email-domain">
-                                    <span>@</span>
-                                    <input type="text" class="input-basic font-s ps-4 pe-5" id="inputDomain" required>
-                                </div>
-                                <select class="select-basic font-s" id="domain">
-                                    <option th:text="직접입력" th:value="''"></option>
-                                    <option th:text="naver.com" th:value="naver.com"></option>
-                                    <option th:text="gmail.com" th:value="gmail.com"></option>
-                                </select>
-                            </div>
+                            <input type="text" class="form-control font-s mt-2 pe-5 mb-2" id="email" placeholder="zgoo@example.com" autocomplete="off" required>
                         </div>
-                        <div class="mt-4">
-                            <div>결제수단 등록<b class="required-data">*</b></div>
-                            <div class="payment-container">
-                                <span><i class="bi bi-plus-circle-fill"></i></span>
-                                <span>대표 결제 카드를 등록해 주세요</span>
+                        <div class="mt-4" id="paymentContent">
+                            <div class="position-relative">
+                                <span>결제수단 등록<b class="required-data">*</b></span>
+                                <button type="button" class="button-bw-s button-pos-right font-s" id="cardSaveBtn" onclick="paymentClick('block')">
+                                    <i class="bi bi-plus-circle-fill me-2"></i>대표카드 등록</button>
+                                <button type="button" class="button-bw-s button-pos-right font-s" id="cardDelBtn" style="visibility: hidden;">
+                                    <i class="bi bi-trash me-2"></i>대표카드 삭제</button>
                             </div>
+                            <div class="pay-container mt-2">
+                                <p class="font-s">
+                                    <img>
+                                    <span id="cardName"></span>
+                                </p>
+                                <div class="font-s" id="card"></div>
+                            </div>
+                            <!-- <div class="payment-container">
+                                <span onclick="paymentClick('block')"><i class="bi bi-plus-circle-fill"></i></span>
+                                <span>대표 결제 카드를 등록해 주세요</span>
+                            </div> -->
                         </div>
                         <div class="mt-4">
                             <div>생년월일<b class="required-data">*</b></div>
-                            <input type="number" class="input-basic font-s ps-2" id="birth" placeholder="ex) 19980128" required>
+                            <input type="number" class="form-control font-s mt-2" id="birth" placeholder="ex) 19980128" autocomplete="off"
+                                oninput="maxLengthNum(this, 8)" required>
                         </div>
                         <div class="mt-4">
                             <div>주소<b class="required-data">*</b></div>
                             <div class="input-btn-container mb-2">
-                                <input type="text" class="input-basic font-s ps-2 pe-5" id="zipcode" readonly required>
-                                <button type="button" class="button-bw-s font-s">우편번호</button>
+                                <input type="text" class="form-control font-s mt-2 pe-5" id="zipCode" autocomplete="off" disabled required>
+                                <button type="button" class="button-bw-s font-s" onclick="postSearch()">우편번호</button>
                             </div>
-                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="address" readonly required>
-                            <input type="text" class="input-basic font-s ps-2 pe-5" id="addressDetail" placeholder="상세주소를 입력해 주세요" required>
+                            <input type="text" class="form-control font-s mt-2 pe-5 mb-2" id="address" autocomplete="off" disabled required>
+                            <input type="text" class="form-control font-s mt-2 pe-5" id="addressDetail" placeholder="상세주소를 입력해 주세요"
+                                autocomplete="off" required>
                         </div>
                         <div class="mt-4">
                             <div>차량 번호/모델</div>
-                            <input type="text" class="input-basic font-s ps-2 pe-5 mb-2" id="carNum" placeholder="ex) 12가 1234">
-                            <input type="text" class="input-basic font-s ps-2 pe-5" id="model" placeholder="ex) IONIC 6">
+                            <input type="text" class="form-control font-s mt-2 pe-5 mb-2" id="carNum" placeholder="ex) 12가 1234" autocomplete="off">
+                            <input type="text" class="form-control font-s mt-2 pe-5" id="model" placeholder="ex) IONIC 6" autocomplete="off">
                         </div>
-                        <div class="mt-4">
-                            <div>개인/법인<b class="required-data">*</b></div>
-                            <input type="radio" id="typePB" name="bizType" value="PB" checked>
-                            <label for="typePB">개인</label>
-                            <input type="radio" id="typeCB" name="bizType" value="CB">
-                            <label for="typeCB">법인</label>
-                        </div>
-                        <button type="submit" class="button-bw-l mt-4">가입하기</button>
+                        <button type="button" class="button-bw-l regist-btn mt-4" id="saveBtn" disabled>가입하기</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-    <script>
-        function goToNext() {
-            document.getElementById('slider').style.transform = 'translateX(-100%)';
-        }
-    </script>
+
+    <!-- 결제수단등록 -->
+    <div id="paymentLayer" style="display: none;">
+        <div class="container">
+            <div class="mem-header">
+                <span onclick="paymentClick('none')"><i class="fa-solid fa-chevron-left"></i></span>
+                <span>결제수단 등록</span>
+            </div>
+            <div class="mem-body p-2">
+                <form id="paymentForm">
+                    <div>카드 정보를 입력해주세요</div>
+                    <div class="mt-4">
+                        <div>카드번호<b class="required-data">*</b></div>
+                        <div class="d-flex align-items-center">
+                            <input type="number" class="form-control text-center font-s card-input" id="cardNum1" name="cardNum1"
+                                oninput="maxLengthNum(this, 4)" autocomplete="off" required>
+                            <span class="mx-1">-</span>
+                            <input type="number" class="form-control text-center font-s card-input" id="cardNum2" name="cardNum2"
+                                oninput="maxLengthNum(this, 4)" autocomplete="off" required>
+                            <span class="mx-1">-</span>
+                            <input type="password" class="form-control text-center font-s card-input" id="cardNum3" name="cardNum3"
+                                oninput="maxLengthNum(this, 4)" autocomplete="off" required>
+                            <span class="mx-1">-</span>
+                            <input type="password" class="form-control text-center font-s card-input" id="cardNum4" name="cardNum4"
+                                oninput="maxLengthNum(this, 4)" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="mt-4" style="display: flex; align-items: flex-start; width: 100%; ">
+                        <div class="me-2" style="flex: 1;">
+                            <div>유효기간<b class="required-data">*</b></div>
+                            <div class="expire-inputs">
+                                <input type="number" class="form-control text-center font-s" id="cardExpireMonth" placeholder="MM" autocomplete="off"
+                                    oninput="maxLengthNum(this, 2)" required>
+                                <span>/</span>
+                                <input type="number" class="form-control text-center font-s" id="cardExpireYear" placeholder="YY" autocomplete="off"
+                                    oninput="maxLengthNum(this, 2)" required>
+                            </div>
+                        </div>
+                        <div class="ms-2" style="flex: 1;">
+                            <div>CVC번호<b class="required-data">*</b></div>
+                            <input type="number" class="form-control font-s" id="cvc"  autocomplete="off" oninput="maxLengthNum(this, 3)"
+                                required>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div>카드비밀번호<b class="required-data">*</b></div>
+                        <input type="number" class="form-control font-s" id="cardPw" placeholder="앞 2자리" autocomplete="off"
+                            oninput="maxLengthNum(this, 2)" required>
+                    </div>
+                    <button type="button" class="button-bw-l mt-4 regist-btn" id="savePayBtn" disabled>등록하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/js/join.js}"></script>
 </div>
+
+<div id="postcodeLayer"><div id="postcodeContainer"></div></div>
 </html>

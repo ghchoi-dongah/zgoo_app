@@ -15,14 +15,15 @@ input[type="checkbox"]:checked {
     background-color: #102c57;
 }
 
-.container { width: 100%; }
+/* .container { width: 100%; } */
+.container { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
 
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {
-    html {font-size: 26px;}
-    .font-s {font-size: 20px;}
-    .font-xs {font-size: 18px;}
+    html {font-size: 26px !important;}
+    .font-s {font-size: 20px !important;}
+    .font-xs {font-size: 18px !important;}
     #test {
         width: 200px;
         height: 200px;
@@ -32,9 +33,9 @@ input[type="checkbox"]:checked {
 
 /* 테블릿 세로 (해상도 768px ~ 1023px)*/
 @media all and (min-width:768px) and (max-width:1023px) { 
-    html {font-size: 24px;}
-    .font-s {font-size: 20px;}
-    .font-xs {font-size: 18px;}
+    html {font-size: 24px !important;}
+    .font-s {font-size: 20px !important;}
+    .font-xs {font-size: 18px !important;}
     .container { max-width: 1020px; }
     #test {
         width: 100px;
@@ -45,9 +46,9 @@ input[type="checkbox"]:checked {
 
 /* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
 @media all and (min-width:480px) and (max-width:767px) {
-    html {font-size: 22px;}
-    .font-s {font-size: 18px;}
-    .font-xs {font-size: 16px;}
+    html {font-size: 22px !important;}
+    .font-s {font-size: 18px !important;}
+    .font-xs {font-size: 16px !important;}
     .container { max-width: 760px; }
     #test {
         width: 70px;
@@ -58,9 +59,9 @@ input[type="checkbox"]:checked {
 
 /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
 @media all and (max-width:479px) {
-    html {font-size: 18px;}
-    .font-s {font-size: 14px;}
-    .font-xs {font-size: 12px;}
+    html {font-size: 18px !important;}
+    .font-s {font-size: 14px !important;}
+    .font-xs {font-size: 12px !important;}
     .container { max-width: 475px; }
     #test {
         width: 50px;
@@ -70,22 +71,33 @@ input[type="checkbox"]:checked {
 }
 
 .input-basic, .select-basic { width: 100%; height: 50px; border: none; border-radius: 10px; background-color: #F2F2F2; }
+.input-basic-border { width: 100%; height: 50px; border: 2px solid #E8E8E8; border-radius: 10px; }
 .select-basic { padding-left: .5rem !important; }
 
 .button-bw-l { width: 100%; height: 50px; color: white; border: none; border-radius: 30px; background-color: #282828; }
 .button-bw-s { padding: 5px 10px; margin-right: 10px; color: white; border: none; border-radius: 10px;
     background-color: #282828; }
+.button-pos-right { position: absolute; right: 0; margin: 0; }
 
 .required-data { color: red; font-weight: bold; }
 
 .input-btn-container { position: relative; }
 .input-btn-container input { padding-right: 5.5rem !important; }
 .input-btn-container button { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+.input-readonly { outline: none; box-shadow: none; border-color: transparent; }
 
-/* 로그인, 회원가입, 아이디 & 비밀번호 찾기 header */
-.mem-header { height: 80px; display: flex; align-items: center; position: relative; }
+.invalid-data { color: red; display: none; margin: .25rem !important; }
+.valid-data { color: green; display: none; margin: .25rem !important; }
+
+/* 로그인, 회원가입, 아이디 & 비밀번호 찾기 공통 */
+.mem-header { height: 80px; display: flex; align-items: center; position: relative;
+    flex: 0 0 auto; background-color: #fff; z-index: 10; transition: border-bottom 0.2s ease; }
+.mem-header.scrolled::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; 
+    background: rgba(0, 0, 0, 0.1); }
 .mem-header > span:nth-child(1) { margin-left: 10px; }
 .mem-header > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); }
+.mem-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;}
+.mem-body::-webkit-scrollbar { display: none; }
 
 /* 로그인 */
 .mem-lgoin-div { height: 1px; position: relative; margin: 20px 0; border-bottom: 1px solid lightslategrey; }
@@ -98,15 +110,53 @@ input[type="checkbox"]:checked {
 .term-container > span { text-decoration: underline; color: grey; position: absolute; right: 0; top: 50%;
     transform: translateY(-50%); }
 
-.slide-container { display: flex; width: 100%; transition: transform 0.5s ease; will-change: transform; }
+.biz-search-container { width: 100%; max-height: 30vh; border: 1px solid #dee2e6; border-radius: .375rem; overflow-y: scroll;
+    display: none;}
+.biz-search-container > div { display: block; width: 100%; padding: 1rem .75rem; }
+.biz-search-container > div:hover { background-color: #C7D9DD;}
+/* .slide-container { display: flex; width: 100%; transition: transform 0.5s ease; will-change: transform; }
 .slide-wrapper { overflow: hidden; width: 100%; }
-.slide { flex: 0 0 100%; }
+.slide { flex: 0 0 100%; } */
+
+.slide-wrapper { position: relative; width: 100%; overflow: hidden; }
+.slide-container { position: relative; width: 100%; height: auto;  }
+.slide > div { padding: .25rem !important; }
+.slide { position: absolute; top: 0; left: 0; width: 100%; transition: opacity 0.5s ease; opacity: 0; pointer-events:
+    none; min-height: 80vh; }
+.slide.active { opacity: 1; pointer-events: auto; position: relative; }
 
 .input-email-domain {margin-bottom: .5rem !important; position: relative; }
 .input-email-domain > span { position: absolute; top: 50%; left: 10px; transform: translateY(-50%); pointer-events: none; }
+.input-search { position: relative; }
+.input-search > span { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); }
+.input-search > input { padding-right: 2rem !important; }
 
-.payment-container { width: 100%; max-width: 330px; height: 200px; background-color: #E8E8E8; border-radius: 25px; position: relative; }
+.payment-container { width: 100%; max-width: 330px; height: 200px; background-color: #E8E8E8; border-radius: 25px;
+    position: relative; }
 .payment-container > span:nth-child(1) { font-size: 50px; display: inline-block; position: absolute; left: 50%;
     transform: translate(-50%, 50%); }
 .payment-container > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); bottom: 20px;
     min-width: 300px; text-align: center; font-size: 18px; }
+
+.pay-container { display: block; width: 100%; padding: 1rem .75rem; font-weight: 400; line-height: 1.5; appearance: none; 
+    border: 1px solid #dee2e6; border-radius: .375rem; background-color: #e9ecef; opacity: 1;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;}
+
+#paymentLayer.show { position: fixed !important; top: 0; left: 0; z-index: 9999 !important; width: 100vw; height: 100vh;
+        background-color: white; display: flex !important; flex-direction: column; }
+
+/* #cardExpireMonth, #cardExpireYear, #cardPw { width: 60px; height: 50px; border: none; border-radius: 10px;
+    background-color: #F2F2F2; text-align: center; } */
+
+.bottom-btn { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; }
+button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey; cursor: not-allowed; opacity: 0.6; }
+
+.radio-space-between { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.radio-space-between > div { display: flex; align-items: center; gap: 0.5rem; }
+
+#postcodeLayer { position: fixed !important; top: 0; left: 0; z-index: 9999 !important; width: 100vw; height: 100vh; }
+
+/* #cardExpireMonth, #cardExpireYear { width: 100%; height: 50px; border: none; border-radius: 10px;
+    background-color: #F2F2F2; text-align: center; box-sizing: border-box; } */
+
+.expire-inputs { display: flex; align-items: center; gap: 4px; }

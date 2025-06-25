@@ -1,16 +1,23 @@
 package zgoo.app.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import zgoo.app.dto.member.MemberDto.MemberConditionDto;
+import zgoo.app.service.MemberService;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class PageController {
+
+    private final MemberService memberService;
 
     /* 
      * 메인
@@ -85,9 +92,11 @@ public class PageController {
 
         try {
             /* 약관코드 조회 */
-            
+            List<MemberConditionDto> conList = this.memberService.findAllConditionList();
+            model.addAttribute("conList", conList);
         } catch (Exception e) {
-
+            e.getStackTrace();
+            model.addAttribute("conList", Collections.emptyList());
         }
 
         return "pages/member/join";
