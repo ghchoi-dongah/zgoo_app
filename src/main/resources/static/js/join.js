@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const paymentContent = document.getElementById('paymentContent');
     ///////////////////////////////////////////////////////////////////
     const name = document.getElementById('name');
+    const isValidName = document.getElementById('isValidName');
     // id
     const memLoginId = document.getElementById('memLoginId');
     const invalidId = document.getElementById('invalidId');
@@ -88,7 +89,12 @@ document.addEventListener("DOMContentLoaded", function() {
     ///////////////////////////////////////////////////////////////////
     // 계정정보 확인
     name.addEventListener('input', function() {
-        isNameChecked = this.value.trim() !== '';
+        isValidName.style.display = isName(name.value) ? 'none' : 'block';
+        if (isName(name.value)) {
+            isNameChecked = true;
+        } else {
+            isNameChecked = false;
+        }
         console.log('name: ' + this.value);
         validateForm();
     });
@@ -114,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error('서버 오류: ' + response.status);
+                    throw new Error('Network Error: ' + response.status);
                 }
                 return response.json();
             })

@@ -52,7 +52,6 @@ function maxLengthCheck(object) {
 function isEmail(asValue) {
     var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     return regExp.test(asValue);
-    // return result;
 }
 
 // 2. id(영문으로 시작, 영문+숫자 조합 6~20자)
@@ -66,12 +65,6 @@ function isId(asValue) {
 function isPassword(asValue) {
     var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/;
     return regExp.test(asValue);
-
-    // if (!result) {
-    //     alert("비밀번호는 8~16자의 영문자와 숫자를 최소 하나씩 포함해야 합니다.");
-    // }
-
-    // return result;
 }
 
 // 4. password(8~16자 영문, 숫자, 특수문자 최소 한 가지씩 조합)
@@ -80,10 +73,19 @@ function isPasswordSpecial(asValue) {
     var regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
     // var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,16}$/;
     return regExp.test(asValue);
+}
 
-    // if (!result) {
-    //     alert("비밀번호는 8~16자의 영문자, 숫자, 특수문자를 최소 하나씩 포함해야 합니다.");
-    // }
+// 5. name(한글, 영문 대소문자만 사용 가능)
+function isName(name) {
+    const regex = /^[가-힣A-Za-z]+$/;
+    return regex.test(name);
+}
 
-    // return result;
+function closeAlarm(target) {
+    document.getElementById(target).style.display = 'none';
+}
+
+function closeAlarmAndReplace(target, url) {
+    document.getElementById(target).style.display = 'none';
+    location.replace(url);
 }

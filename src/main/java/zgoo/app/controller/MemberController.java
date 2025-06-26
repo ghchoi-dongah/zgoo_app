@@ -1,10 +1,12 @@
 package zgoo.app.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,6 +72,26 @@ public class MemberController {
             return ResponseEntity.ok(bizList);
         } catch (Exception e) {
             log.error("[MemberController >> searchBizInfo] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 아이디 찾기
+    @GetMapping("/find/id")
+    public ResponseEntity<Optional<String>> findMemLoginId(@RequestParam("name") String name, @RequestParam("phone") String phone)  {
+        log.info("=== find memLoinId ===");
+        log.info("[MemberController >> findMemLoginId] name: {}, phone: {}", name, phone);
+
+        try {
+            Optional<String> memLoginId = this.memberService.findMemLoginId(name, phone);
+
+            if (ObjectUtils.isEmpty(memLoginId)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            return ResponseEntity.ok(memLoginId);
+        } catch (Exception e) {
+            log.error("[MemberController >> findMemLoginId] error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

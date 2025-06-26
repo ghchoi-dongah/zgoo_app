@@ -2,6 +2,7 @@ package zgoo.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
@@ -275,6 +276,18 @@ public class MemberService {
         } catch (Exception e) {
             log.error("[MemberService >> findBizInfo] error: {}", e.getMessage(), e);
             return new ArrayList<>();
+        }
+    }
+
+    // 아이디 찾기
+    public Optional<String> findMemLoginId(String name, String phone) {
+        try {
+            Optional<String> memLoginId = this.memberRepository.findMemLoginIdByNameAndPhone(name, phone);
+            log.info("[MemberService >> findMemLoginId] memLoinId: {}", memLoginId);
+            return memLoginId;
+        } catch (Exception e) {
+            log.error("[MemberService >> findMemLoginId] error: {}", e.getMessage(), e);
+            return Optional.empty();
         }
     }
 }

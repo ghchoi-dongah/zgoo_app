@@ -5,27 +5,90 @@
         <span>아이디 찾기</span>
     </div>
     <div class="mem-body p-2">
-        <form th:action="@{/find-id}" method="get">
+        <form>
             <div>
                 <div>이름<b class="required-data">*</b></div>
-                <input type="text" class="form-control font-s mt-2" id="name" placeholder="이름을 입력해 주세요" required>
+                <input type="text" class="form-control font-s mt-2" id="name" placeholder="이름을 입력해 주세요"
+                    autocomplete="off" required>
+                <div class="font-xs invalid-data" id="isValidName">- 한글/영문 대소문자만 사용 가능합니다.</div>
             </div>
             <div class="mt-4">
                 <div>휴대폰번호<b class="required-data">*</b></div>
                 <div class="input-btn-container">
-                    <input type="number" class="form-control font-s pe-5 mt-2" id="phone" placeholder="휴대폰번호를 입력해 주세요" required>
+                    <input type="number" class="form-control font-s pe-5 mt-2" id="phone" placeholder="휴대폰번호를 입력해 주세요"
+                        autocomplete="off" oninput="maxLengthNum(this, 11)" required>
                     <button type="button" class="button-bw-s font-s">인증번호</button>
                 </div>
             </div>
             <div class="mt-4">
                 <div>인증번호<b class="required-data">*</b></div>
                 <div class="input-btn-container">
-                    <input type="text" class="form-control font-s pe-5 mt-2" id="verifiNum" placeholder="인증번호를 입력해 주세요" required>
+                    <input type="text" class="form-control font-s pe-5 mt-2" id="verifiNum" placeholder="인증번호를 입력해 주세요"
+                        autocomplete="off" required>
                     <button type="button" class="button-bw-s font-s">확인</button>
                 </div>
             </div>
-            <button type="button" class="button-bw-l mt-4">확인</button>
+            <button type="button" class="button-bw-l mt-4" id="checkBtn">확인</button>
         </form>
     </div>
+    <div id="findIdN" class="find-mem-container">
+        <div>
+            <div class="find-alarm failure">
+                <div><i class="fa-solid fa-exclamation m-auto"></i></div>
+                <div class="font-m">해당 정보로 가입된 계정을 찾을 수 없습니다.</div>
+                <div><span class="font-s" onclick="closeAlarm('findIdN')">확인</span></div>
+            </div>
+        </div>
+    </div>
+    <div id="findIdY" class="find-mem-container">
+        <div>
+            <div class="find-alarm success">
+                <div id="findId"></div>
+                <div class="font-m">해당 정보로 가입된 아이디입니다.</div>
+                <div><span class="font-s" onclick="closeAlarmAndReplace('findIdY', '/login')">확인</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isNameChecked =  false;
+
+        document.getElementById('name').addEventListener('input', function() {
+            const name = document.getElementById('name');
+            const isValidName = document.getElementById('isValidName');
+
+            isValidName.style.display = isName(name.value) ? 'none' : 'block';
+            isNameChecked = isName(name.value);
+            console.log('name: ' + this.value);
+        });
+
+        document.getElementById('checkBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log("find id button click");
+            if (!isNameChecked) return;
+
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+
+            fetch(`/member/find/id?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`, {
+                method: 'GET',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network Error: " + response.status);
+                    }
+                    return response.text();
+                })
+                .then((data) => {
+                    console.log("조회된 ID: " + data);
+                    document.getElementById('findId').innerText = data;
+                    document.getElementById('findIdY').style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error("Error: ", error);
+                    document.getElementById('findIdN').style.display = 'block';
+                })
+        });
+    </script>
 </div>
 </html>

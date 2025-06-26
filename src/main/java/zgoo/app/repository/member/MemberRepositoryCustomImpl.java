@@ -16,12 +16,23 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     QMember member = QMember.member;
 
     @Override
-    public  Optional<Member> findByMemLoginId(String memLoginId) {
+    public Optional<Member> findByMemLoginId(String memLoginId) {
         Member result =  queryFactory
                 .selectFrom(member)
                 .where(member.memLoginId.eq(memLoginId))
                 .fetchOne();
 
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<String> findMemLoginIdByNameAndPhone(String name, String phone) {
+        String result =  queryFactory
+                .select(member.memLoginId)
+                .from(member)
+                .where(member.name.eq(name), member.phoneNo.eq(phone))
+                .fetchOne();
+                
         return Optional.ofNullable(result);
     }
 }

@@ -22,6 +22,7 @@ input[type="checkbox"]:checked {
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {
     html {font-size: 26px !important;}
+    .font-m {font-size: 24px;}
     .font-s {font-size: 20px !important;}
     .font-xs {font-size: 18px !important;}
     #test {
@@ -34,6 +35,7 @@ input[type="checkbox"]:checked {
 /* 테블릿 세로 (해상도 768px ~ 1023px)*/
 @media all and (min-width:768px) and (max-width:1023px) { 
     html {font-size: 24px !important;}
+    .font-m {font-size: 22px;}
     .font-s {font-size: 20px !important;}
     .font-xs {font-size: 18px !important;}
     .container { max-width: 1020px; }
@@ -47,6 +49,7 @@ input[type="checkbox"]:checked {
 /* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
 @media all and (min-width:480px) and (max-width:767px) {
     html {font-size: 22px !important;}
+    .font-m {font-size: 20px;}
     .font-s {font-size: 18px !important;}
     .font-xs {font-size: 16px !important;}
     .container { max-width: 760px; }
@@ -60,6 +63,7 @@ input[type="checkbox"]:checked {
 /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
 @media all and (max-width:479px) {
     html {font-size: 18px !important;}
+    .font-m {font-size: 16px;}
     .font-s {font-size: 14px !important;}
     .font-xs {font-size: 12px !important;}
     .container { max-width: 475px; }
@@ -96,7 +100,8 @@ input[type="checkbox"]:checked {
     background: rgba(0, 0, 0, 0.1); }
 .mem-header > span:nth-child(1) { margin-left: 10px; }
 .mem-header > span:nth-child(2) { position: absolute; left: 50%; transform: translateX(-50%); }
-.mem-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;}
+.mem-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    -ms-overflow-style: none;}
 .mem-body::-webkit-scrollbar { display: none; }
 
 /* 로그인 */
@@ -110,8 +115,8 @@ input[type="checkbox"]:checked {
 .term-container > span { text-decoration: underline; color: grey; position: absolute; right: 0; top: 50%;
     transform: translateY(-50%); }
 
-.biz-search-container { width: 100%; max-height: 30vh; border: 1px solid #dee2e6; border-radius: .375rem; overflow-y: scroll;
-    display: none;}
+.biz-search-container { width: 100%; max-height: 30vh; border: 1px solid #dee2e6; border-radius: .375rem;
+    overflow-y: scroll; display: none;}
 .biz-search-container > div { display: block; width: 100%; padding: 1rem .75rem; }
 .biz-search-container > div:hover { background-color: #C7D9DD;}
 /* .slide-container { display: flex; width: 100%; transition: transform 0.5s ease; will-change: transform; }
@@ -145,9 +150,6 @@ input[type="checkbox"]:checked {
 #paymentLayer.show { position: fixed !important; top: 0; left: 0; z-index: 9999 !important; width: 100vw; height: 100vh;
         background-color: white; display: flex !important; flex-direction: column; }
 
-/* #cardExpireMonth, #cardExpireYear, #cardPw { width: 60px; height: 50px; border: none; border-radius: 10px;
-    background-color: #F2F2F2; text-align: center; } */
-
 .bottom-btn { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; }
 button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey; cursor: not-allowed; opacity: 0.6; }
 
@@ -156,7 +158,17 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 
 #postcodeLayer { position: fixed !important; top: 0; left: 0; z-index: 9999 !important; width: 100vw; height: 100vh; }
 
-/* #cardExpireMonth, #cardExpireYear { width: 100%; height: 50px; border: none; border-radius: 10px;
-    background-color: #F2F2F2; text-align: center; box-sizing: border-box; } */
-
 .expire-inputs { display: flex; align-items: center; gap: 4px; }
+
+/* 아이디, 비밀번호 조회 */
+.find-mem-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; z-index: 999;
+    background-color: rgba(122, 122, 122, 0.6); }
+.find-mem-container > div:nth-child(1) { width: 100%; height: 100%; display: flex; justify-content: center;
+    align-items: center; }
+.find-alarm { width: 80%; height: 200px; margin: auto; text-align: center; background-color: white; border-radius: 20px;
+    padding: 10px; position: relative; }
+.find-alarm.failure > div:nth-child(1) { width: 60px; height: 60px; margin: auto; background-color: grey; border-radius: 50%; color: white; font-size: 36px; }
+.find-alarm.success > div:nth-child(1) { position: absolute; left: 50%; top: 20%; transform: translateX(-50%); width: 100%; padding: 0 20px; }
+.find-alarm > div:nth-child(2) { position: absolute; left: 50%; top: 40%; transform: translateX(-50%); width: 100%; padding: 0 20px;}
+.find-alarm > div:nth-child(3) { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-top: 1px solid black;
+    width: 100%; color: #5567BC; font-weight: 600; }
