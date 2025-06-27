@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
@@ -81,6 +83,29 @@ public class PageController {
         }
 
         return "pages/member/find_pw";
+    }
+
+    /* 
+     * 비밀번호 재설정
+     */
+    @GetMapping("/member/reset-pw")
+    public String showresetpw(HttpSession session, Model model) {
+        log.info("=== Reset Pw Page ===");
+
+        try {
+            String loginId = (String) session.getAttribute("resetLoginId");
+            log.info("[PageController >> showresetpw] loginId: {}", loginId);
+            
+            if (ObjectUtils.isEmpty(loginId)) {
+                return "redirect:/member/find-pw";
+            }
+
+            model.addAttribute("memLoginId", loginId);
+            return "pages/member/reset_pw";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "redirect:/member/find-pw";
+        }
     }
 
     /*

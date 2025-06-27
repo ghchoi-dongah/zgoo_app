@@ -1,0 +1,111 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>비밀번호 재설정</span>
+    </div>
+    <div class="mem-body p-2">
+        <form>
+            <input type="text" id="memLoginId" name="memLoginId" th:value="${memLoginId}" hidden>
+            <div>
+                <div>새 비밀번호<b class="required-data">*</b></div>
+                <input type="password" class="form-control font-s mt-2" id="newPw" name="newPw" placeholder="8자 이상/영문 대소문자, 숫자, 특수문자"
+                    autocomplete="off" required>
+                <div class="font-xs invalid-data" id="isvalidPw">- 영문자로 시작하고 6~20자의 영문자 및 숫자로 구성되어야 합니다.</div>
+            </div>
+            <div class="mt-4">
+                <div>새 비밀번호 확인<b class="required-data">*</b></div>
+                <input type="password" class="form-control font-s mt-2" id="rePw" placeholder="비밀번호 재입력"
+                    autocomplete="off" required>
+                <div class="font-xs invalid-data" id="invalidPw">- 비밀번호가 일치하지 않습니다.</div>
+            </div>
+            <button type="submit" class="button-bw-l regist-btn mt-4" id="saveBtn" disabled>비밀번호 변경</button>
+        </form>
+    </div>
+
+    <div id="resetPwN" class="find-mem-container">
+        <div>
+            <div class="find-alarm failure">
+                <div><i class="fa-solid fa-exclamation m-auto"></i></div>
+                <div class="font-m">비밀번호 변경에 실패하였습니다.</div>
+                <div><span class="font-s" onclick="closeAlarm('resetPwN')">확인</span></div>
+            </div>
+        </div>
+    </div>
+    <div id="resetPwY" class="find-mem-container">
+        <div>
+            <div class="find-alarm success">
+                <div class="font-m">비밀번호 변경에 성공하였습니다.</div>
+                <div class="font-m">확인 버튼을 클릭하시면 로그인 화면으로 이동됩니다.</div>
+                <div><span class="font-s" onclick="closeAlarmAndReplace('resetPwY', '/login')">확인</span></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const newPw = document.getElementById('newPw');
+        const rePw = document.getElementById('rePw');
+        const isvalidPw = document.getElementById('isvalidPw');
+        const invalidPw = document.getElementById('invalidPw');
+        const saveBtn = document.getElementById('saveBtn');
+        const memLoginId = document.getElementById('memLoginId');
+        const resetPwN = document.getElementById('resetPwN');
+        const resetPwY = document.getElementById('resetPwY');
+        let isPwChecked = false;
+
+        newPw.addEventListener('input', handleInput);
+        rePw.addEventListener('input', handleInput);
+
+        function handleInput() {
+            // 비밀번호 일치 여부 확인
+            if (newPw.value === rePw.value) {
+                invalidPw.style.display = 'none';
+            } else {
+                invalidPw.style.display = 'block';
+            }
+
+            // 비밀번호 유효성 검사
+            if (isPasswordSpecial(newPw.value)) {
+                isvalidPw.style.display = 'none';
+                isPwChecked = true;
+            } else {
+                isvalidPw.style.display = 'block';
+                isPwChecked = false;
+            }
+
+            // 버튼 활성화 여부
+            if (newPw.value === rePw.value && isPwChecked) {
+                saveBtn.disabled = false;
+            } else {
+                saveBtn.disabled = true;
+            }
+        }
+
+        saveBtn.addEventListener('click' ,function(e) {
+            e.preventDefault();
+
+            fetch(`/member/reset/pw?memLoginId=${encodeURIComponent(memLoginId.value)}
+                    &newPw=${encodeURIComponent(newPw.value)}`, {
+                method: 'PATCH',
+                headers: { "Content-Type" : "application/json" },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("비밀번호 변경 실패");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.result) {
+                        resetPwY.style.display = 'block';
+                    } else {
+                        resetPwN.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error: ", error);
+                    resetPwN.style.display = 'block';;
+                })
+        })
+    </script>
+</div>
+</html>

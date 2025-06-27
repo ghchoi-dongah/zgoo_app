@@ -290,4 +290,42 @@ public class MemberService {
             return Optional.empty();
         }
     }
+
+    // 회원정보가 있는지 확인(비밀번호 찾기)
+    public Boolean findMemberInfoInPw(String name, String memLoginId, String phone) {
+        try {
+            Optional<Member> member = this.memberRepository.findMemberByNameAndIdAndPhone(name, memLoginId, phone);
+
+            if (ObjectUtils.isEmpty(member)) {
+                log.warn("[MemberService >> findMemberInfoInPw] member is empty");
+                return false;
+            }
+
+            log.info("[MemberService >> findMemberInfoInPw] member: {}", member.toString());
+            return true;
+        } catch (Exception e) {
+            log.error("[MemberService >> findMemberInfoInPw] error: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public Boolean updatePassword(String memLoginId, String newPw) {
+        try {
+            Member member = this.memberRepository.findMemberByMemLoginId(memLoginId);
+
+            if (ObjectUtils.isEmpty(member)) {
+                log.warn("[MemberService >> updatePassword] member is empty");
+                return false;
+            }
+
+            member.updatePasswordInfo(EncryptionUtils.encryptSHA256(newPw));
+            log.info("[MemberService >> updatePassword] update password complete");
+            return true;
+        } catch (Exception e) {
+            log.error("[MemberService >> updatePassword] error: {}", e.getMessage(), e);
+            return false;
+        }
+    }
 }
