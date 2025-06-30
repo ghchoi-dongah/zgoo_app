@@ -70,6 +70,14 @@ public class MemberService {
 
             log.info("[MemberService >> saveMember] member info: {}", dto.toString());
 
+            if (this.memberRepository.findByEmail(dto.getEmail()).isPresent()) {
+                throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+            }
+
+            if (this.memberRepository.findByPhoneNo(dto.getPhoneNo()).isPresent()) {
+                throw new IllegalArgumentException("이미 존재하는 전화번호입니다.");
+            }
+
             Member member;
             dto.setIdTag(generateIdTag());  // 회원번호 자동부여
             dto.setPassword(EncryptionUtils.encryptSHA256(dto.getPassword()));  // 암호화
