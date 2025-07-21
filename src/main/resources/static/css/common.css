@@ -120,13 +120,17 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .find-alarm > div:nth-child(3) { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-top: 1px solid black;
     width: 100%; color: #5567BC; font-weight: 600; }
 
-
 /* navbar */
 .nav-container { background-color: white; border-top: 1px solid #ccc; padding: 10px 0; }
 .nav-content { display: flex; justify-content: space-around; align-items: center; text-align: center; }
 .nav-content > a { flex: 1; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; }
 .nav-content > a > i { font-size: 20px; }
 .nav-content > a > span { margin-top: 4px; }
+
+/* header */
+.header-container { position: fixed; top: 0; left: 0; width: 100%; padding: 20px 20px 10px 20px; background-color: white; z-index: 9999; }
+.header-container .main-logo { text-decoration: none; color: #102C57; font-size: 26px; font-weight: 700; font-style: italic; }
+.header-container .alarm { text-decoration: none; color: #102C57; font-size: 24px; float: right; }
 /* home */
 .new-article { color: #899BF5; }
 .home-btn-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 3%; padding: 5% 0; }
