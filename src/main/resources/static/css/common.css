@@ -121,6 +121,7 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
     width: 100%; color: #5567BC; font-weight: 600; }
 
 /* navbar */
+.nav-container-pos { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; }
 .nav-container { background-color: white; border-top: 1px solid #ccc; padding: 10px 0; }
 .nav-content { display: flex; justify-content: space-around; align-items: center; text-align: center; }
 .nav-content > a { flex: 1; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #333; }
@@ -131,6 +132,10 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .header-container { position: fixed; top: 0; left: 0; width: 100%; padding: 20px 20px 10px 20px; background-color: white; z-index: 9999; }
 .header-container .main-logo { text-decoration: none; color: #102C57; font-size: 26px; font-weight: 700; font-style: italic; }
 .header-container .alarm { text-decoration: none; color: #102C57; font-size: 24px; float: right; }
+
+/* main content */
+.main-content { padding: 70px 20px 90px 20px; width: 100%; height: 100%; overflow-y: auto; }
+
 /* home */
 .new-article { color: #899BF5; }
 .home-btn-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 3%; padding: 5% 0; }
@@ -140,6 +145,7 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .box img { width: 50%; height: auto; margin-bottom: 8px; }
 .box.qr { display: flex; flex-direction: column; justify-content: center; }
 .box .label { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: #333; }
+.chevron-pos { position: absolute; right: 0; top: 0; color: darkgrey; }
 
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {
