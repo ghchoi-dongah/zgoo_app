@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
+import zgoo.app.dto.support.NoticeDto.NoticeListDto;
 import zgoo.app.service.MemberService;
+import zgoo.app.service.NoticeService;
 
 @Controller
 @Slf4j
@@ -20,6 +22,7 @@ import zgoo.app.service.MemberService;
 public class PageController {
 
     private final MemberService memberService;
+    private final NoticeService noticeService;
 
     /* 
      * 메인
@@ -29,9 +32,12 @@ public class PageController {
         log.info("=== Main Page ===");
 
         try {
+            List<NoticeListDto> noticeList = this.noticeService.getRecentNotices();
+            model.addAttribute("noticeList", noticeList);
 
         } catch (Exception e) {
-
+            e.getStackTrace();
+            model.addAttribute("noticeList", Collections.emptyList());
         }
         
         return "pages/main";

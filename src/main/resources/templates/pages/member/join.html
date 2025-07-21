@@ -6,10 +6,10 @@
     </div>
     <div class="mem-body p-2">
         <form id="joinForm" th:action="@{/join}" method="get">
-            <div class="slide-wrapper">
-                <div class="slide-container" id="slider">
+            <div class="slider-wrapper">
+                <div class="slider-container" id="sliderr">
                     <!-- 이용약관 -->
-                    <div id="content1" class="slide active">
+                    <div id="content1" class="slider active">
                         <div>
                             <div>약관동의</div>
                             <p class="font-s">아래 약관을 확인 및 동의해 주세요</p>
@@ -28,10 +28,10 @@
                                 <span class="font-xs">내용확인</span>
                             </div>
                         </div>
-                        <button type="button" class="button-bw-l bottom-btn" id="slideBtn1" onclick="goToNext(1)" disabled>다음</button>
+                        <button type="button" class="button-bw-l bottom-btn" id="sliderBtn1" onclick="goToNext(1)" disabled>다음</button>
                     </div>
                     <!-- 회원 유형 선택 -->
-                    <div id="content2" class="slide">
+                    <div id="content2" class="slider">
                         <div style="flex: 1; padding-bottom: 60px !important;">
                             <p>회원 유형 선택</p>
                             <div class="mt-4 px-2 radio-space-between">
@@ -57,10 +57,10 @@
                                 <div class="biz-search-container font-s" id="bizList"></div>
                             </div>
                         </div>
-                        <button type="button" class="button-bw-l bottom-btn" id="slideBtn2" onclick="goToNext(2)">다음</button>
+                        <button type="button" class="button-bw-l bottom-btn" id="sliderBtn2" onclick="goToNext(2)">다음</button>
                     </div>
                     <!-- 회원정보 입력 -->
-                    <div id="content3" class="slide">
+                    <div id="content3" class="slider">
                         <div>
                             <div>계정정보 확인</div>
                             <p class="font-s" id="memType">개인 회원</p>
