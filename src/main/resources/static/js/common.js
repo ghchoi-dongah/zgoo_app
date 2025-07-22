@@ -90,7 +90,7 @@ function closeAlarmAndReplace(target, url) {
     location.replace(url);
 }
 
-function goMainWithoutHistory(url) {
+function goPageWithoutHistory(url) {
     window.history.replaceState(null, '', url); // URL만 바꾸기 (주소창 변경)
     window.location.reload(); // 강제로 새 페이지 로드
 }

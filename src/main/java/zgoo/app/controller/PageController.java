@@ -44,6 +44,38 @@ public class PageController {
     }
 
     /* 
+     * 충전소 찾기
+     */
+    @GetMapping("/find-charger")
+    public String showfindcharger(Model model) {
+        log.info("=== Find Charger Page ===");
+
+        try {
+
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        return "pages/find_charger";
+    }
+
+    /* 
+     * 전체 메뉴
+     */
+    @GetMapping("/full-menu")
+    public String showfullmenu(Model model) {
+        log.info("=== Full Menu Page ===");
+
+        try {
+
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        return "pages/full_menu";
+    }
+
+    /* 
      * 로그인
      */
     @GetMapping("/login")
