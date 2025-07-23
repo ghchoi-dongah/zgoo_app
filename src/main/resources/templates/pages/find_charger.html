@@ -1,8 +1,33 @@
 <html layout:decorate="~{fragments/layout}">
-<div layout:fragment="content">
-    <div th:replace="~{fragments/header :: headerFragment}"></div>
-    <div id="test" style="padding-right: 50px;"></div>
+<div layout:fragment="content" class="h-100">
+    <div class="search-container">
+        <!-- filter -->
+        <span class="filter" id="filter"><i class="bi bi-filter-circle-fill"></i></span>
+        <!-- 검색창 -->
+        <span class="search-content" id="searchContainer">
+            <input type="text" id="search" placeholder="충전소, 장소 검색" />
+            <span><i class="bi bi-search"></i></span>
+        </span>
+        <!-- route -->
+        <span id="route" class="route"><i class="fa-solid fa-diamond-turn-right"></i></span>
+        <!-- location -->
+        <span class="location"><i class="fa-solid fa-location-crosshairs"></i></span>
+    </div>
+
+
+    <div class="w-100 h-100" id="map"></div>
 
     <div th:replace="~{fragments/nav :: navFragment}"></div>
+
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2627a1d15418d5bd6f92dfadded8a675&libraries=services,clusterer"></script>
+    <script>
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울 시청
+            level: 3
+        };
+        var map = new kakao.maps.Map(container, options);
+    </script>
 </div>
 </html>
