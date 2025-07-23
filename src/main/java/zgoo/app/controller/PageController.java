@@ -1,8 +1,11 @@
 package zgoo.app.controller;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.groovy.runtime.ObjectUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -63,13 +66,22 @@ public class PageController {
      * 전체 메뉴
      */
     @GetMapping("/full-menu")
-    public String showfullmenu(Model model) {
+    public String showfullmenu(Model model, Principal principal) {
         log.info("=== Full Menu Page ===");
 
         try {
 
+            if (principal != null) {
+                String memLoginId = principal.getName();
+                log.info("memLoginId: {}", memLoginId);
+
+                Optional<String> name = this.memberService.getMemberName(memLoginId);
+                model.addAttribute("name", name.orElse(""));
+            }
+
         } catch (Exception e) {
             e.getStackTrace();
+            model.addAttribute("name", "");
         }
 
         return "pages/full_menu";

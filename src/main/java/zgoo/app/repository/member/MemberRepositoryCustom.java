@@ -9,4 +9,5 @@ public interface MemberRepositoryCustom {
     Member findMemberByMemLoginId(String memLoginId);
     Optional<String> findMemLoginIdByNameAndPhone(String name, String phone);
     Optional<Member> findMemberByNameAndIdAndPhone(String name, String memLoginId, String phone);
+    Optional<String> getName(String memLoginId);
 }

@@ -2,10 +2,15 @@
 <div layout:fragment="content" class="main-content">
     <div th:replace="~{fragments/header :: headerFragment}"></div>
 
-    <div class="user-state-container">
+    <div class="user-state-container" sec:authorize="isAnonymous()">
         <span style="font-size: 26px;"><i class="bi bi-person-circle"></i></span>
         <span class="ms-2">로그인이 필요합니다.</span>
         <button type="button" class="button-bw-r font-s ms-auto">로그인</button>
+    </div>
+    <div class="user-state-container" sec:authorize="isAuthenticated()">
+        <span style="font-size: 26px;"><i class="bi bi-person-circle"></i></span>
+        <span class="ms-2" th:text="|${name} 님|"></span>
+        <button type="button" class="button-bw-r font-s ms-auto">로그아웃</button>
     </div>
     <div class="font-m pt-3">
         <div sec:authorize="isAuthenticated()">

@@ -55,4 +55,15 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
         return Optional.ofNullable(result);
     }
+
+    @Override
+    public Optional<String> getName(String memLoginId) {
+        String result = queryFactory
+                .select(member.name)
+                .from(member)
+                .where(member.memLoginId.eq(memLoginId))
+                .fetchOne();
+            
+        return Optional.ofNullable(result);
+    }
 }

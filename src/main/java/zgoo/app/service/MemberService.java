@@ -336,4 +336,16 @@ public class MemberService {
             return false;
         }
     }
+
+    // 회원명 조회
+    public Optional<String> getMemberName(String memLoginId) {
+        try {
+            Optional<String> name = this.memberRepository.getName(memLoginId);
+            log.info("[MemberService >> getMemberName] member name: {}", name);
+            return name;
+        } catch (Exception e) {
+            log.error("[MemberService >> getMemberName] error: {}", e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
 }
