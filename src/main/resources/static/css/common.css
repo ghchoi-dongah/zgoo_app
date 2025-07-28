@@ -18,17 +18,18 @@ input[type="checkbox"]:checked {
 /* .container { width: 100%; } */
 .container { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-
 .input-basic, .select-basic { width: 100%; height: 50px; border: none; border-radius: 10px; background-color: #F2F2F2; }
 .input-basic-border { width: 100%; height: 50px; border: 2px solid #E8E8E8; border-radius: 10px; }
 .select-basic { padding-left: .5rem !important; }
 
+/* button custom */
 .button-bw-l { width: 100%; height: 50px; color: white; border: none; border-radius: 30px; background-color: #282828; }
 .button-bw-s { padding: 5px 10px; margin-right: 10px; color: white; border: none; border-radius: 10px;
     background-color: #282828; }
-.button-bw-r { padding: 5px 25px; margin-right: 10px; color: white; border: none; border-radius: 30px;
+.button-bw-r, .span-bw-r { padding: 5px 25px; margin-right: 10px; color: white; border: none; border-radius: 30px;
     background-color: #282828; }
 .button-pos-right { position: absolute; right: 0; margin: 0; }
+.span-bw-r a { color: white !important; text-decoration: none; }
 
 .required-data { color: red; font-weight: bold; }
 
@@ -39,6 +40,8 @@ input[type="checkbox"]:checked {
 
 .invalid-data { color: red; display: none; margin: .25rem !important; }
 .valid-data { color: green; display: none; margin: .25rem !important; }
+
+.right-vertical-center { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
 
 /* 로그인, 회원가입, 아이디 & 비밀번호 찾기 공통 */
 .mem-header { height: 80px; display: flex; align-items: center; position: relative;
@@ -132,6 +135,8 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .header-container { position: fixed; top: 0; left: 0; width: 100%; padding: 20px 20px 10px 20px; background-color: white; z-index: 9999; }
 .header-container .main-logo { text-decoration: none; color: #102C57; font-size: 26px; font-weight: 700; font-style: italic; }
 .header-container .alarm { text-decoration: none; color: #102C57; font-size: 24px; float: right; }
+.header-scroll.scrolled::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; 
+    background: rgba(0, 0, 0, 0.1); }
 
 /* main content */
 .main-content { padding: 70px 20px 90px 20px; width: 100%; height: 100%; overflow-y: auto; }
@@ -163,7 +168,7 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 /* full menu */
 .user-state-container { display: flex; align-items: center; width: 100%; margin-top: 3rem; position: relative; padding-bottom: 0.5rem;
     border-bottom: 1px solid grey;}
-
+.user-content a { color: black !important; text-decoration: none; }
 
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {

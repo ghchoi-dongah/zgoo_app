@@ -1,0 +1,145 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>비밀번호 변경</span>
+    </div>
+    <div class="mem-body p-2">
+        <form id="pwForm" th:action="@{/update/pw}" method="post">
+            <div>
+                <div>현재 비밀번호<b class="required-data">*</b></div>
+                <input type="password" class="form-control font-s mt-2" id="pw" name="pw" placeholder="현재 비밀번호를 입력해 주세요"
+                    autocomplete="off" required>
+            </div>
+            <div class="mt-4">
+                <div>새 비밀번호<b class="required-data">*</b></div>
+                <input type="password" class="form-control font-s mt-2" id="newPw" name="newPw" placeholder="8자 이상/영문 대소문자, 숫자, 특수문자"
+                    autocomplete="off" required>
+                <div class="font-xs invalid-data" id="isValidPw">- 8~16자의 영문자, 숫자, 특수문자를 최소 하나씩 포함해야 합니다.</div>
+            </div>
+            <div class="mt-4">
+                <div>새 비밀번호 확인<b class="required-data">*</b></div>
+                <input type="password" class="form-control font-s mt-2" id="newPwCheck" name="newPwCheck" placeholder="비밀번호 재입력"
+                    autocomplete="off" required>
+                <div class="font-xs invalid-data" id="invalidPw">- 비밀번호가 일치하지 않습니다.</div>
+            </div>
+            <button type="button" class="button-bw-l mt-4 regist-btn" id="editBtn" disabled>비밀번호 변경</button>
+        </form>
+    </div>
+
+    <div id="updatePw" class="find-mem-container">
+        <div>
+            <div class="find-alarm success">
+                <div></div>
+                <div class="font-m" id="updatePwMsg">해당 정보로 가입된 계정을 찾을 수 없습니다.</div>
+                <div id="updatePwBtnContainer"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let isPwChecked = false;
+        const pw = document.getElementById('pw');
+        const newPw = document.getElementById('newPw');
+        const newPwCheck = document.getElementById('newPwCheck');
+        const isValidPw = document.getElementById('isValidPw');
+        const invalidPw = document.getElementById('invalidPw');
+        const editBtn = document.getElementById('editBtn');
+
+        const updatePw = document.getElementById('updatePw');
+        const updatePwMsg = document.getElementById('updatePwMsg');
+        const updatePwBtn = document.getElementById('updatePwBtn');
+
+        pw.addEventListener('input', function() {
+            console.log('pw: ' + this.value);
+            validateForm();
+        });
+
+        newPw.addEventListener('input', function() {
+            if (isPasswordSpecial(newPw.value)) {
+                isValidPw.style.display = 'none';
+                isPwChecked = true;
+            } else {
+                isValidPw.style.display = 'block';
+                isPwChecked = false;
+            }
+
+            if (newPw.value !== newPwCheck.value) return;
+            validateForm();
+        });
+
+        newPwCheck.addEventListener('input', function() {
+            if (isPasswordSpecial(newPwCheck.value)) {
+                isPwChecked = true;
+            } else {
+                isPwChecked = false;
+            }
+
+            if (newPw.value === newPwCheck.value) {
+                invalidPw.style.display = 'none';
+            } else {
+                invalidPw.style.display = 'block';
+                return;
+            }
+
+            validateForm();
+        });
+
+        editBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const bodyData = {
+                existPassword: pw.value,
+                newPassword: newPw.value,
+                newPasswordCheck: newPwCheck.value
+            }
+
+            fetch(`/update/pw`, {
+                method: 'PATCH',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyData)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('서버 오류: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("data.state: " + data.state);
+                    console.log("data.message: " + data.message);
+
+                    const updatePwBtnContainer = document.getElementById("updatePwBtnContainer");
+
+                    if (data.state === 1) {
+                        updatePwBtnContainer.innerHTML = `
+                            <div>
+                                <span class="font-s" id="updatePwBtn" onclick="history.back()">확인</span>
+                            </div>
+                        `;
+                    } else {
+                        updatePwBtnContainer.innerHTML = `
+                            <div>
+                                <span class="font-s" id="updatePwBtn" onclick="closeAlarm('updatePw')">확인</span>
+                            </div>
+                        `;
+                    }
+                    
+                    updatePwMsg.innerText = data.message;
+                    updatePw.style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error("에러: " + error);
+                });
+        });
+
+        function validateForm() {
+            if (isPwChecked && isPasswordSpecial(pw.value)) {
+                editBtn.disabled = false;
+            } else {
+                editBtn.disabled = true;
+            }
+        }
+    </script>
+</div>
+</html>

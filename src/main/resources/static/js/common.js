@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+    checkScrollContent();
+});
+
 function postSearch() {
     new daum.Postcode({
         oncomplete: function (data) {
@@ -93,4 +97,14 @@ function closeAlarmAndReplace(target, url) {
 function goPageWithoutHistory(url) {
     window.history.replaceState(null, '', url); // URL만 바꾸기 (주소창 변경)
     window.location.reload(); // 강제로 새 페이지 로드
+}
+
+function checkScrollContent() {
+    const headerContent = document.querySelector('.header-scroll');
+    const bodyContent = document.querySelector('.body-scroll');
+    if (bodyContent.scrollTop > 0) {
+        headerContent.classList.add('scrolled');
+    } else {
+        headerContent.classList.remove('scrolled');
+    }
 }

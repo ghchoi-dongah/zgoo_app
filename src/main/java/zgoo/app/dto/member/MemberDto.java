@@ -103,4 +103,14 @@ public class MemberDto {
         private String stringAgreeDt;
         private LocalDateTime agreeDt;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MemberPasswordDto {
+        private String existPassword;
+        private String newPassword;
+        private String newPasswordCheck;
+    }
 }

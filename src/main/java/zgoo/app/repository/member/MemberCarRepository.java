@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import zgoo.app.domain.member.MemberCar;
 
-public interface MemberCarRepository extends JpaRepository<MemberCar, Long> {
+public interface MemberCarRepository extends JpaRepository<MemberCar, Long>, MemberCarRepositoryCustom {
 
 }

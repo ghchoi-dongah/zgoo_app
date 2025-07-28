@@ -2,23 +2,11 @@
 <div layout:fragment="content" class="container">
     <div class="mem-header">
         <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
-        <span>비밀번호 찾기</span>
+        <span>휴대폰번호 변경</span>
     </div>
     <div class="mem-body p-2">
         <form id="pwForm" th:action="@{/member/find/pw}" method="post">
             <div>
-                <div>이름<b class="required-data">*</b></div>
-                <input type="text" class="form-control font-s mt-2" id="name" name="name" placeholder="이름을 입력해 주세요"
-                    autocomplete="off" required>
-                <div class="font-xs invalid-data" id="isValidName">- 한글/영문 대소문자만 사용 가능합니다.</div>
-            </div>
-            <div class="mt-4">
-                <div>아이디<b class="required-data">*</b></div>
-                <input type="text" class="form-control font-s mt-2" id="memLoginId" name="memLoginId" placeholder="아이디를 입력해 주세요"
-                    autocomplete="off" required>
-                <div class="font-xs invalid-data" id="isValidId">- 영문자로 시작하고 6~20자의 영문자 및 숫자로 구성되어야 합니다.</div>
-            </div>
-            <div class="mt-4">
                 <div>휴대폰번호<b class="required-data">*</b></div>
                 <div class="input-btn-container">
                     <input type="number" class="form-control font-s pe-5 mt-2" id="phone" placeholder="'-'없이 연속으로 입력"
@@ -34,10 +22,10 @@
                     <button type="button" class="button-bw-s font-s">확인</button>
                 </div>
             </div>
-            <button type="button" class="button-bw-l mt-4 regist-btn" id="saveBtn" disabled>확인</button>
+            <button type="button" class="button-bw-l mt-4 regist-btn" id="editBtn" disabled>전화번호 변경</button>
         </form>
     </div>
-    <div id="findPwN" class="find-mem-container">
+    <!-- <div id="findPwN" class="find-mem-container">
         <div>
             <div class="find-alarm failure">
                 <div><i class="fa-solid fa-exclamation m-auto"></i></div>
@@ -111,6 +99,6 @@
                     console.error("에러: " + error);
                 });
         });
-    </script>
+    </script> -->
 </div>
 </html>

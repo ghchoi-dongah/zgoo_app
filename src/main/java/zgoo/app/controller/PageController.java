@@ -5,18 +5,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.groovy.runtime.ObjectUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
+import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
 import zgoo.app.service.MemberService;
+import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
 
 @Controller
@@ -25,6 +29,7 @@ import zgoo.app.service.NoticeService;
 public class PageController {
 
     private final MemberService memberService;
+    private final MyPageService myPageService;
     private final NoticeService noticeService;
 
     /* 
@@ -175,5 +180,61 @@ public class PageController {
         }
 
         return "pages/member/join";
+    }
+
+    /* 
+     * 개인정보수정
+     */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/info")
+    public String showupdatemember(MemberRegDto memberForm, Model model, Principal principal) {
+        log.info("=== Update Member Info Page ===");
+
+        try {
+            MemberRegDto member = this.myPageService.findMemberInfo(principal.getName());
+            if (!member.getMemLoginId().equals(principal.getName())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+            }
+
+            model.addAttribute("memberForm", member);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        return "pages/member_update/member_update";
+    }
+
+    /* 
+     * 비밀번호 변경
+     */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/info/pw")
+    public String showupdatepw(Model model, Principal principal) {
+        log.info("=== Update Password Page ===");
+
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+        return "pages/member_update/pw_update";
+    }
+
+    /*
+     * 전화번호 변경
+     * */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/info/phone")
+    public String showupdatephone(Model model, Principal principal) {
+        log.info("=== Update Phone Info Page ===");
+
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+        return "pages/member_update/phone_update";
     }
 }
