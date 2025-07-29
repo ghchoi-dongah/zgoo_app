@@ -49,6 +49,29 @@ public class MyPageService {
         }
     }
 
+    // 회원정보 수정
+    @Transactional
+    public Integer updateMemberInfo(MemberRegDto dto, String memLoginId) {
+        try {
+            Member member = this.memberRepository.findByMemLoginId(memLoginId)
+                    .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+            // birth format
+            String birth = dto.getBirth();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate date = LocalDate.parse(birth, inputFormatter);
+            String formattedBirth = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            dto.setBirth(formattedBirth);
+
+            member.updateMemberInfo(dto);
+            log.info("[MyPageService >> updateMemberInfo] member info update complete");
+            return 1;
+        } catch (Exception e) {
+            log.error("[MyPageService >> updateMemberInfo] error: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
     // 비밀번호 변경
     @Transactional
     public Integer updatePasswordInfo(MemberPasswordDto dto, String memLoginId) {

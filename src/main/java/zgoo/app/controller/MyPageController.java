@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
+import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 
@@ -26,10 +27,26 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     // 회원정보 수정
-    // @PatchMapping("/member/update")
-    // public ResponseEntity<String> updateMember() {
-        
-    // }
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/update/member")
+    public ResponseEntity<String> updateMember(@RequestBody MemberRegDto dto, Principal principal) {
+        log.info("=== update member info ===");
+        log.info("[MyPageController >> updateMember] dto: {}", dto.toString());
+
+        try {
+            Integer result = this.myPageService.updateMemberInfo(dto, principal.getName());
+
+            return switch (result) {
+                case 1 -> ResponseEntity.status(HttpStatus.OK).body("수정이 완료되었습니다.");
+                default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정에 실패했습니다.");
+            };
+
+        } catch (Exception e) {
+            log.error("[MyPageController >> updateMember] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                    .body("수정에 실패했습니다.");
+        }
+    }
 
     // 비밀번호 변경
     @PreAuthorize("isAuthenticated()")

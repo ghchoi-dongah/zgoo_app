@@ -48,7 +48,7 @@
                 <input type="text" class="form-control font-s mt-2 pe-5 mb-2" th:field="*{address}"
                     autocomplete="off" disabled required>
                 <input type="text" class="form-control font-s mt-2 pe-5" th:field="*{addressDetail}"
-                     placeholder="상세주소를 입력해 주세요" autocomplete="off" required>
+                    placeholder="상세주소를 입력해 주세요" autocomplete="off" required>
             </div>
             <div class="mt-4">
                 <div>차량 번호/모델</div>
@@ -109,68 +109,27 @@
                 </div>
             </div>
             <div class="mt-1" style="text-align: end; text-decoration: underline; color: darkgrey;">회원탈퇴</div>
-            <button type="button" class="button-bw-l mt-4" id="updatekBtn">수정하기</button>
+            <button type="button" class="button-bw-l mt-4 regist-btn" id="updatekBtn">수정하기</button>
         </form>
     </div>
-    <!-- <div id="findIdN" class="find-mem-container">
+    <div id="updateN" class="find-mem-container">
         <div>
             <div class="find-alarm failure">
                 <div><i class="fa-solid fa-exclamation m-auto"></i></div>
-                <div class="font-m">해당 정보로 가입된 계정을 찾을 수 없습니다.</div>
-                <div><span class="font-s" onclick="closeAlarm('findIdN')">확인</span></div>
+                <div class="font-m">수정에 실패했습니다.</div>
+                <div><span class="font-s" onclick="closeAlarm('updateN')">확인</span></div>
             </div>
         </div>
     </div>
-    <div id="findIdY" class="find-mem-container">
+    <div id="updateY" class="find-mem-container">
         <div>
             <div class="find-alarm success">
-                <div id="findId"></div>
-                <div class="font-m">해당 정보로 가입된 아이디입니다.</div>
-                <div><span class="font-s" onclick="closeAlarmAndReplace('findIdY', '/login')">확인</span></div>
+                <div id="updateId"></div>
+                <div class="font-m">수정이 완료되었습니다.</div>
+                <div><span class="font-s" onclick="location.reload()">확인</span></div>
             </div>
         </div>
     </div>
-
-    <script>
-        let isNameChecked =  false;
-
-        document.getElementById('name').addEventListener('input', function() {
-            const name = document.getElementById('name');
-            const isValidName = document.getElementById('isValidName');
-
-            isValidName.style.display = isName(name.value) ? 'none' : 'block';
-            isNameChecked = isName(name.value);
-            console.log('name: ' + this.value);
-        });
-
-        document.getElementById('checkBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log("find id button click");
-            if (!isNameChecked) return;
-
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-
-            fetch(`/member/find/id?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`, {
-                method: 'GET',
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network Error: " + response.status);
-                    }
-                    return response.text();
-                })
-                .then((data) => {
-                    console.log("조회된 ID: " + data);
-                    document.getElementById('findId').innerText = data;
-                    document.getElementById('findIdY').style.display = 'block';
-                })
-                .catch((error) => {
-                    console.error("Error: ", error);
-                    document.getElementById('findIdN').style.display = 'block';
-                })
-        });
-    </script> -->
     <script type="text/javascript" th:src="@{/js/member_update.js}"></script>
 </div>
 <div id="postcodeLayer"><div id="postcodeContainer"></div></div>

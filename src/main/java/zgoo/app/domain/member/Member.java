@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import zgoo.app.domain.biz.BizInfo;
+import zgoo.app.dto.member.MemberDto.MemberRegDto;
 
 @Table(name = "MEMBER")
 @Entity
@@ -85,12 +86,19 @@ public class Member {
     @JoinColumn(name = "biz_id")
     private BizInfo biz;
 
-    public void updateMemberInfo() {
-
+    public void updateMemberInfo(MemberRegDto dto) {
+        this.name = dto.getName();
+        this.email = dto.getEmail();
+        this.birth = dto.getBirth();
+        this.zipCode = dto.getZipCode();
+        this.address = dto.getAddress();
+        this.addressDetail = dto.getAddressDetail();
+        this.modDt = LocalDateTime.now();
     }
 
     public void updatePasswordInfo(String password) {
         this.password = password;
+        this.modDt = LocalDateTime.now();
     }
 
     public void updateCreditStatInfo(String creditcardStat) {
