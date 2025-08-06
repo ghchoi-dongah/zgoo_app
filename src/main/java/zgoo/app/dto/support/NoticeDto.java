@@ -36,4 +36,14 @@ public class NoticeDto {
         private boolean isNew;
         private LocalDate startDate;
     }
+
+    @Data
+    @NoArgsConstructor
+    @SuperBuilder
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class NoticeDetailDto extends NoticeBaseDto {
+        private String typeName;
+        private String content;
+    }
 }

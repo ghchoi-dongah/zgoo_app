@@ -42,6 +42,7 @@ input[type="checkbox"]:checked {
 .valid-data { color: green; display: none; margin: .25rem !important; }
 
 .right-vertical-center { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+.color-grey { color: grey; }
 
 /* 로그인, 회원가입, 아이디 & 비밀번호 찾기 공통 */
 .mem-header { height: 80px; display: flex; align-items: center; position: relative;
@@ -169,6 +170,15 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .user-state-container { display: flex; align-items: center; width: 100%; margin-top: 3rem; position: relative; padding-bottom: 0.5rem;
     border-bottom: 1px solid grey;}
 .user-content a { color: black !important; text-decoration: none; }
+
+.filter-content { overflow-x: auto; white-space: nowrap; padding: 10px 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+.filter-content::-webkit-scrollbar { display: none; }
+.filter-content span { display: inline-block; border: 1px solid #282828; border-radius: 20px; padding: 0.3rem 0.7rem; margin-right: 8px; }
+.filter-content .filter-focus { background-color: #102C57; color: white; }
+
+/* notice */
+.notice-container { flex: 1; overflow-y: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.notice-container .notice-content { padding: 1rem 0.2rem; border-bottom: 1px solid grey; }
 
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {

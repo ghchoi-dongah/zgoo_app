@@ -2,21 +2,26 @@ package zgoo.app.controller;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.dto.support.NoticeDto.NoticeListDto;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
+import zgoo.app.service.NoticeService;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class MyPageController {
 
     private final MemberService memberService;
     private final MyPageService myPageService;
+    private final NoticeService noticeService;
 
     // 회원정보 수정
     @PreAuthorize("isAuthenticated()")
@@ -72,6 +78,25 @@ public class MyPageController {
             log.error("[MyPageController >> updatePassword] error: {}", e.getMessage(), e);
             response.put("message", "비밀번호 변경 중 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    // 유형별 공지조회
+    @GetMapping("/notice/get")
+    public ResponseEntity<List<NoticeListDto>> getNoticesByType(@RequestParam("code") String code) {
+        log.info("=== get notice Llist ====");
+
+        try {
+            if ("N1".equals(code)) {
+                List<NoticeListDto> noticeList = this.noticeService.findNoticeAll();
+                return ResponseEntity.ok(noticeList);
+            } 
+            
+            List<NoticeListDto> noticeList = this.noticeService.getNoticesByType(code);
+            return ResponseEntity.ok(noticeList);
+        } catch (Exception e) {
+            log.error("[MyPageController >> getNoticesByType] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

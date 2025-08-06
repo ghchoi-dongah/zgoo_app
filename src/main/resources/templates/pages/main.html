@@ -87,10 +87,10 @@
         <div class="fw-bold">공지사항</div>
         <span class="chevron-pos"><i class="bi bi-chevron-right"></i></span>
         <div class="mt-2">
-            <div th:each="notice : ${noticeList}" class="m-1 font-s">
+            <div th:each="notice : ${noticeList}" class="mb-2 font-s">
                 <a href="#" class="text-decoration-none">
                     <span th:if="${notice.isNew}" class="new-article">NEW</span>
-                    <span th:text="${notice.title}"></span>
+                    <span th:text="|[${notice.typeName}] ${notice.title}|"></span>
                 </a>
             </div>
         </div>

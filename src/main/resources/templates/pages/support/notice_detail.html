@@ -1,0 +1,17 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>공지사항</span>
+    </div>
+    <div class="mem-body p-2">
+        <div class="notice-title" style="border-bottom: 1px solid #282828; padding: 0.7rem 0;">
+            <div th:text="|[${notice.typeName}] ${notice.title}|"></div>
+            <span th:text="${#temporals.format(notice.regDt, 'yyyy-MM-dd HH:mm:ss')}" class="color-grey font-m"></span>
+            <span th:text="|조회: ${notice.views != null ? #numbers.formatInteger(notice.views, 0, 'COMMA') : '0'}|"
+                class="color-grey font-m float-end"></span>
+        </div>
+        <div th:utext="${content}" style="padding: 0.5rem 0;"></div>
+    </div>
+</div>
+</html>

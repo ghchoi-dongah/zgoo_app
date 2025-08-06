@@ -11,17 +11,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import zgoo.app.dto.code.CodeDto.CommCdBaseDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.dto.support.NoticeDto.NoticeDetailDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
+import zgoo.app.service.CommonService;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
+import zgoo.app.util.GrpcodeConstants;
 
 @Controller
 @Slf4j
@@ -31,6 +36,7 @@ public class PageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
     private final NoticeService noticeService;
+    private final CommonService commonService;
 
     /* 
      * 메인
@@ -236,5 +242,46 @@ public class PageController {
         }
 
         return "pages/member_update/phone_update";
+    }
+
+    /* 
+     * 공지사항
+     */
+    @GetMapping("/mypage/notice")
+    public String shownotice(Model model) {
+        log.info("=== Notice Page ===");
+
+        try {
+            List<NoticeListDto> noticeList = this.noticeService.findNoticeAll();
+            model.addAttribute("noticeList", noticeList);
+
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(GrpcodeConstants.NOTICETYPECD);
+            model.addAttribute("typeList", typeList);
+        } catch (Exception e) {
+            e.getStackTrace();
+            model.addAttribute("noticeList", Collections.emptyList());
+        }
+
+        return "pages/support/notice";
+    }
+
+    /* 
+     * 공지사항(상세)
+     */
+    @GetMapping("/mypage/notice/detail/{id}")
+    public String shownoticedetail(Model model, @PathVariable("id") Long id) {
+        log.info("=== Detail Notice Page ===");
+
+        try {
+            NoticeDetailDto notice = this.noticeService.findNoticeDetailOne(id);
+            String content = notice.getContent().replace("\n", "<br>");
+            model.addAttribute("notice", notice);
+            model.addAttribute("content", content);
+
+            return "pages/support/notice_detail";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "pages/support/notice";
+        }
     }
 }

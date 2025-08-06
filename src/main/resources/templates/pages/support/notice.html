@@ -1,0 +1,124 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>공지사항</span>
+    </div>
+    <div class="p-2" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="filter-content font-s">
+            <span th:each="type : ${typeList}" th:text="${type.commonCodeName}" th:id="${type.commonCode}"
+                onclick="handleFilterClick(this)"></span>
+        </div>
+
+        <div class="notice-container font-m" id="noticeContainer">
+            <div class="notice-content" th:each="notice : ${noticeList}">
+                <a th:href="@{/mypage/notice/detail/{id}(id=${notice.noticeId})}" class="text-decoration-none position-relative">
+                    <span th:if="${notice.isNew}" class="new-article">NEW</span>
+                    <span th:text="|[${notice.typeName}] ${notice.title}|"></span>
+                    <div th:text="${#temporals.format(notice.regDt, 'yyyy-MM-dd HH:mm:ss')}" class="color-grey font-s"></div>
+                    <span class="right-vertical-center"><i class="bi bi-chevron-right"></i></span>
+                </a>
+            </div>
+            <div th:if="${noticeList.size() == 0}" class="notice-content">등록된 게시물이 없습니다.</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const initial = document.getElementById("N1");
+            if (initial) {
+            initial.classList.add("filter-focus");
+            }
+        });
+
+        function handleFilterClick(clickedSpan) {
+            // 모든 span에서 filter-focus 클래스 제거
+            const spans = document.querySelectorAll("span[id^='N']");
+            spans.forEach(span => span.classList.remove("filter-focus"));
+
+            // 클릭한 span에만 filter-focus 클래스 추가
+            clickedSpan.classList.add("filter-focus");
+
+            // 클릭된 span의 id 콘솔에 출력
+            console.log("Clicked span id:", clickedSpan.id);
+            findFilterNotice(clickedSpan.id);
+        }
+
+        function findFilterNotice(code) {
+            fetch(`/notice/get?code=${encodeURIComponent(code)}`, {
+                method: 'GET',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network Error: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    const noticeContainer = document.getElementById('noticeContainer');
+                    noticeContainer.innerHTML = ''; // 기존 목록 초기화
+
+                    // 데이터가 null이거나 빈 배열인 경우
+                    if (!data || data.length === 0) {
+                        const noNotice = document.createElement('div');
+                        noNotice.textContent = '등록된 게시물이 없습니다.';
+                        noNotice.className = 'notice-content';
+                        noticeContainer.appendChild(noNotice);
+                        return;
+                    }
+
+                    data.forEach((notice) => {
+                        const noticeContent = document.createElement('div');
+                        noticeContent.className = 'notice-content';
+
+                        const aTag = document.createElement('a');
+                        aTag.href = `/mypage/notice/detail/${notice.noticeId}`;
+                        aTag.className = 'text-decoration-none position-relative';
+
+                        // NEW 표시
+                        if (notice.isNew) {
+                            const newSpan = document.createElement('span');
+                            newSpan.className = 'new-article';
+                            newSpan.textContent = 'NEW';
+                            aTag.appendChild(newSpan);
+                        }
+
+                        // 제목
+                        const titleSpan = document.createElement('span');
+                        titleSpan.textContent = `[${notice.typeName}] ${notice.title}`;
+                        aTag.appendChild(titleSpan);
+
+                        // 등록일
+                        const regDtDiv = document.createElement('div');
+                        regDtDiv.className = 'color-grey font-s';
+                        regDtDiv.textContent = formatDateTime(notice.regDt);
+                        aTag.appendChild(regDtDiv);
+
+                        // 오른쪽 아이콘
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'right-vertical-center';
+                        iconSpan.innerHTML = `<i class="bi bi-chevron-right"></i>`;
+                        aTag.appendChild(iconSpan);
+
+                        noticeContent.appendChild(aTag);
+                        noticeContainer.appendChild(noticeContent);
+                    });
+                })
+                .catch((error) => {
+                    console.error('에러: ', error);
+                });
+        }
+
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            const yyyy = date.getFullYear();
+            const MM = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const HH = String(date.getHours()).padStart(2, '0');
+            const mm = String(date.getMinutes()).padStart(2, '0');
+            const ss = String(date.getSeconds()).padStart(2, '0');
+            return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+        }
+    </script>
+</div>
+</html>
