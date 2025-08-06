@@ -42,7 +42,7 @@ input[type="checkbox"]:checked {
 .valid-data { color: green; display: none; margin: .25rem !important; }
 
 .right-vertical-center { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
-.color-grey { color: grey; }
+.color-grey { color: grey !important; }
 
 /* 로그인, 회원가입, 아이디 & 비밀번호 찾기 공통 */
 .mem-header { height: 80px; display: flex; align-items: center; position: relative;

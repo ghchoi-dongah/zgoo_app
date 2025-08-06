@@ -85,10 +85,12 @@
 
     <div class="position-relative w-100 mt-3" id="notice">
         <div class="fw-bold">공지사항</div>
-        <span class="chevron-pos"><i class="bi bi-chevron-right"></i></span>
+        <span class="chevron-pos">
+            <a th:href="@{/mypage/notice}" class="color-grey"><i class="bi bi-chevron-right"></i></a>
+        </span>
         <div class="mt-2">
             <div th:each="notice : ${noticeList}" class="mb-2 font-s">
-                <a href="#" class="text-decoration-none">
+                <a th:href="@{/mypage/notice/detail/{id}(id=${notice.noticeId})}" class="text-decoration-none">
                     <span th:if="${notice.isNew}" class="new-article">NEW</span>
                     <span th:text="|[${notice.typeName}] ${notice.title}|"></span>
                 </a>
