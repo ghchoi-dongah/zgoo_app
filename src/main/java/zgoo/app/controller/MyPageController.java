@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.dto.support.FaqDto.FaqBaseDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
+import zgoo.app.service.FaqService;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
@@ -31,6 +33,7 @@ public class MyPageController {
     private final MemberService memberService;
     private final MyPageService myPageService;
     private final NoticeService noticeService;
+    private final FaqService faqService;
 
     // 회원정보 수정
     @PreAuthorize("isAuthenticated()")
@@ -84,7 +87,7 @@ public class MyPageController {
     // 유형별 공지조회
     @GetMapping("/notice/get")
     public ResponseEntity<List<NoticeListDto>> getNoticesByType(@RequestParam("code") String code) {
-        log.info("=== get notice Llist ====");
+        log.info("=== get notice list ====");
 
         try {
             if ("N1".equals(code)) {
@@ -96,6 +99,25 @@ public class MyPageController {
             return ResponseEntity.ok(noticeList);
         } catch (Exception e) {
             log.error("[MyPageController >> getNoticesByType] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 유형별 FAQ
+    @GetMapping("/faq/get")
+    public ResponseEntity<List<FaqBaseDto>> getFaqBySection(@RequestParam("section") String section) {
+        log.info("=== get faq list ===");
+
+        try {
+            if ("ALL".equals(section)) {
+                List<FaqBaseDto> faqList = this.faqService.findFaqAll();
+                return ResponseEntity.ok(faqList);
+            }
+            
+            List<FaqBaseDto> faqList = this.faqService.getFaqBySection(section);
+            return ResponseEntity.ok(faqList);
+        } catch (Exception e) {
+            log.error("[MyPageController >> getFaqBySection] error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

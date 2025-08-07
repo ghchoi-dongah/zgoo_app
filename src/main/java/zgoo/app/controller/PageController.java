@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,9 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.code.CodeDto.CommCdBaseDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.dto.support.FaqDto.FaqBaseDto;
 import zgoo.app.dto.support.NoticeDto.NoticeDetailDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
 import zgoo.app.service.CommonService;
+import zgoo.app.service.FaqService;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
@@ -37,6 +40,7 @@ public class PageController {
     private final MyPageService myPageService;
     private final NoticeService noticeService;
     private final CommonService commonService;
+    private final FaqService faqService;
 
     /* 
      * 메인
@@ -260,6 +264,7 @@ public class PageController {
         } catch (Exception e) {
             e.getStackTrace();
             model.addAttribute("noticeList", Collections.emptyList());
+            model.addAttribute("typeList", Collections.emptyList());
         }
 
         return "pages/support/notice";
@@ -283,5 +288,26 @@ public class PageController {
             e.getStackTrace();
             return "pages/support/notice";
         }
+    }
+
+    /* 
+     * 자주하는 질문
+     */
+    @GetMapping("/mypage/faq")
+    public String showfaq(Model model) {
+        log.info("=== Faq Page ===");
+
+        try {
+            List<FaqBaseDto> faqList = this.faqService.findFaqAll();
+            model.addAttribute("faqList", faqList);
+
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(GrpcodeConstants.FAQKIND);
+            model.addAttribute("typeList", typeList);
+        } catch (Exception e) {
+            e.getStackTrace();
+            model.addAttribute("typeList", Collections.emptyList());
+        }
+
+        return "pages/support/faq";
     }
 }
