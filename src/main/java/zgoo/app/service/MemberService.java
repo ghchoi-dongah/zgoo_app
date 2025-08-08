@@ -31,7 +31,7 @@ import zgoo.app.repository.member.MemberCarRepository;
 import zgoo.app.repository.member.MemberConditionRepository;
 import zgoo.app.repository.member.MemberCreditCardRepository;
 import zgoo.app.repository.member.MemberRepository;
-import zgoo.app.util.ComcodeConstants;
+import zgoo.app.util.CodeConstants;
 import zgoo.app.util.EncryptionUtils;
 
 @Service
@@ -151,7 +151,7 @@ public class MemberService {
              */
 
             log.info("[MemberService >> saveCreditCard] credit card info: {}", dto.toString());
-            member.updateCreditStatInfo(ComcodeConstants.MCNORMAL);
+            member.updateCreditStatInfo(CodeConstants.MCNORMAL);
             dto.setRepresentativeCard("Y");
             MemberCreditCard card = MemberMapper.toEntityCard(dto, member);
             this.memberCreditCardRepository.save(card);

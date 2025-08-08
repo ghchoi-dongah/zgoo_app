@@ -15,7 +15,7 @@ import zgoo.app.dto.member.MemberDto.MemberCarDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberCreditCardDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
-import zgoo.app.util.ComcodeConstants;
+import zgoo.app.util.CodeConstants;
 
 public class MemberMapper {
 
@@ -35,7 +35,7 @@ public class MemberMapper {
                 .zipCode(dto.getZipCode())
                 .address(dto.getAddress())
                 .addressDetail(dto.getAddressDetail())
-                .userState(ComcodeConstants.MSTNORMAL)
+                .userState(CodeConstants.MSTNORMAL)
                 .joinedDt(LocalDateTime.now())
                 .creditcardStat(dto.getCreditcardStat())
                 .build();
@@ -59,7 +59,7 @@ public class MemberMapper {
                 .zipCode(dto.getZipCode())
                 .address(dto.getAddress())
                 .addressDetail(dto.getAddressDetail())
-                .userState(ComcodeConstants.MSTNORMAL)
+                .userState(CodeConstants.MSTNORMAL)
                 .joinedDt(LocalDateTime.now())
                 .creditcardStat(dto.getCreditcardStat())
                 .build();

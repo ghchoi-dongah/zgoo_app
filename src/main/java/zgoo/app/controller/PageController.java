@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,7 +28,7 @@ import zgoo.app.service.FaqService;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
-import zgoo.app.util.GrpcodeConstants;
+import zgoo.app.util.CodeConstants;
 
 @Controller
 @Slf4j
@@ -259,7 +258,7 @@ public class PageController {
             List<NoticeListDto> noticeList = this.noticeService.findNoticeAll();
             model.addAttribute("noticeList", noticeList);
 
-            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(GrpcodeConstants.NOTICETYPECD);
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.NOTICETYPECD);
             model.addAttribute("typeList", typeList);
         } catch (Exception e) {
             e.getStackTrace();
@@ -301,7 +300,7 @@ public class PageController {
             List<FaqBaseDto> faqList = this.faqService.findFaqAll();
             model.addAttribute("faqList", faqList);
 
-            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(GrpcodeConstants.FAQKIND);
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.FAQKIND);
             model.addAttribute("typeList", typeList);
         } catch (Exception e) {
             e.getStackTrace();
@@ -309,5 +308,24 @@ public class PageController {
         }
 
         return "pages/support/faq";
+    }
+
+    /* 
+     * 1:1 문의
+     */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/voc")
+    public String showvoc(Model model) {
+        log.info("=== Voc Page ===");
+
+        try {
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.VOCTYPE);
+            model.addAttribute("typeList", typeList);
+            return "pages/support/voc";
+        } catch (Exception e) {
+            e.getStackTrace();
+            model.addAttribute("typeList", Collections.emptyList());
+            return "pages/full_menu";
+        }
     }
 }
