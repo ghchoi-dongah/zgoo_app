@@ -1,0 +1,132 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>내 문의내역</span>
+    </div>
+    <div class="p-2" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="filter-content font-s">
+            <span id="ALL" class="filter-focus type" onclick="handleFilterClick(this)">전체</span>
+            <span th:each="type : ${typeList}" th:text="${type.commonCodeName}" th:id="${type.commonCode}"
+                th:class="type" onclick="handleFilterClick(this)"></span>
+        </div>
+
+        <div class="voc-container font-m" id="vocContainer">
+            <div class="voc-content" th:each="voc : ${vocList}">
+                <a th:href="@{/mypage/myvoc/detail/{id}(id=${voc.vocId})}" class="text-decoration-none position-relative">
+                    <div style="display: flex; align-items: center;">
+                        <span th:text="|[${voc.typeName}] ${voc.title}|" class="text-ellipsis mw-70"></span>
+                        <span th:if="${voc.replyStat == 'STANDBY'}" th:text="|답변 대기|" class="ms-2 font-xs badge-grey"></span>
+                        <span th:if="${voc.replyStat == 'COMPLETE'}" th:text="|답변 완료|" class="ms-2 font-xs badge-blue"></span>
+                    </div>
+                    <div th:text="${#temporals.format(voc.regDt, 'yyyy-MM-dd HH:mm:ss')}" class="color-grey font-s"></div>
+                    <span class="right-vertical-center"><i class="bi bi-chevron-right"></i></span>
+                </a>
+            </div>
+            <div th:if="${vocList.size() == 0}" class="voc-content">등록된 문의내역이 없습니다.</div>
+        </div>
+    </div>
+
+    <script>
+        function handleFilterClick(clickedSpan) {
+            const spans = document.querySelectorAll("span.type");
+            spans.forEach(span => span.classList.remove("filter-focus"));
+
+            // 클릭한 span에만 filter-focus 클래스 추가
+            clickedSpan.classList.add("filter-focus");
+            console.log("Clicked span id:", clickedSpan.id);
+
+            findFilterFaq(clickedSpan.id);
+        }
+
+        function findFilterFaq(type) {
+            fetch(`/voc/get?type=${encodeURIComponent(type)}`, {
+                method: 'GET',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network Error: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    const vocContainer = document.getElementById('vocContainer');
+                    vocContainer.innerHTML = ''; // 기존 목록 초기화
+
+                    // 데이터가 null이거나 빈 배열인 경우
+                    if (!data || data.length === 0) {
+                        const noData = document.createElement('div');
+                        noData.textContent = '등록된 게시물이 없습니다.';
+                        noData.className = 'voc-content';
+                        vocContainer.appendChild(noData);
+                        return;
+                    }
+
+                    data.forEach((voc) => {
+                        const vocContent = document.createElement('div');
+                        vocContent.className = 'voc-content';
+
+                        const aTag = document.createElement('a');
+                        aTag.href = `/mypage/myvoc/detail/${voc.vocId}`;
+                        aTag.className = 'text-decoration-none position-relative';
+
+                        // 제목 + 뱃지 감싸는 div
+                        const titleWrapper = document.createElement('div');
+                        titleWrapper.style.display = 'flex';
+                        titleWrapper.style.alignItems = 'center';
+
+                        // 제목
+                        const titleSpan = document.createElement('span');
+                        titleSpan.className = 'text-ellipsis mw-70';
+                        titleSpan.textContent = `[${voc.typeName}] ${voc.title}`;
+                        titleWrapper.appendChild(titleSpan);
+
+                        // 답변 상태 뱃지
+                        if (voc.replyStat === 'STANDBY') {
+                            const badge = document.createElement('span');
+                            badge.className = 'ms-2 font-xs badge-grey';
+                            badge.textContent = '답변 대기';
+                            titleWrapper.appendChild(badge);
+                        } else if (voc.replyStat === 'COMPLETE') {
+                            const badge = document.createElement('span');
+                            badge.className = 'ms-2 font-xs badge-blue';
+                            badge.textContent = '답변 완료';
+                            titleWrapper.appendChild(badge);
+                        }
+
+                        aTag.appendChild(titleWrapper);
+
+                        // 등록일
+                        const regDtDiv = document.createElement('div');
+                        regDtDiv.className = 'color-grey font-s';
+                        regDtDiv.textContent = formatDateTime(voc.regDt);
+                        aTag.appendChild(regDtDiv);
+
+                        // 오른쪽 아이콘
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'right-vertical-center';
+                        iconSpan.innerHTML = `<i class="bi bi-chevron-right"></i>`;
+                        aTag.appendChild(iconSpan);
+
+                        vocContent.appendChild(aTag);
+                        vocContainer.appendChild(vocContent);
+                    });
+                })
+                .catch((error) => {
+                    console.error('에러: ', error);
+                });
+        }
+
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            const yyyy = date.getFullYear();
+            const MM = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const HH = String(date.getHours()).padStart(2, '0');
+            const mm = String(date.getMinutes()).padStart(2, '0');
+            const ss = String(date.getSeconds()).padStart(2, '0');
+            return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+        }
+    </script>
+</div>
+</html>

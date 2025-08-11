@@ -1,0 +1,64 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>내 문의내역</span>
+    </div>
+    <div class="mem-body p-2">
+        <input type="text" id="vocId" th:value="${voc.vocId}" hidden>
+        <div class="py-3 border-bottom-black">
+            <div th:text="|[${voc.typeName}] ${voc.title}|"></div>
+            <span th:text="${#temporals.format(voc.regDt, 'yyyy-MM-dd HH:mm:ss')}" class="color-grey font-m"></span>
+        </div>
+        <div th:utext="${voc.content}" class="font-m min-vh-30 py-2 border-bottom-black"></div>
+        <div class="font-m min-vh-30 py-2">
+            <div th:text="|[답변 ${voc.replyStatName}]|"></div>
+            <div th:if="${voc.replyContent != null}" th:utext="${voc.replyContent}"></div>
+        </div>
+        <button type="button" class="button-bw-l mt-3" id="deleteBtn">삭제하기</button>
+    </div>
+
+    <div id="alertCheck" class="alert-container">
+        <div>
+            <div class="alert-content">
+                <div class="alert-text font-m">해당 문의내역을 삭제하시겠습니까?</div>
+                <div class="alert-flex-btn">
+                    <span class="font-s" onclick="closeAlert('alertCheck')">취소</span>
+                    <span class="font-s" onclick="deleteVoc()">확인</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const deleteBtn = document.getElementById('deleteBtn');
+        const alertCheck = document.getElementById('alertCheck');
+
+        deleteBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alertCheck.style.display = 'block';
+        });
+
+        function deleteVoc() {
+            closeAlert('alertCheck');
+            const vocId = document.getElementById('vocId').value;
+            console.log("id: ", vocId);
+            fetch(`/voc/delete/${vocId}`, {
+                method: 'PATCH'
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('서버 오류: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then((data) => {
+                    console.log(data);
+                    window.location.replace('/mypage/myvoc');
+                })
+                .catch((error) => {
+                    console.error('error: ', error);
+                });
+        }
+    </script>
+</div>
+</html>

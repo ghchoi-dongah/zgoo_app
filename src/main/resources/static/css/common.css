@@ -31,7 +31,7 @@ select {
 .select-basic { padding-left: .5rem !important; }
 
 /* button custom */
-.button-bw-l { width: 100%; height: 50px; color: white; border: none; border-radius: 30px; background-color: #282828; }
+.button-bw-l { width: 100%; padding: 0.6rem 0; color: white; border: none; border-radius: 30px; background-color: #282828; }
 .button-bw-s { padding: 5px 10px; margin-right: 10px; color: white; border: none; border-radius: 10px;
     background-color: #282828; }
 .button-bw-r, .span-bw-r { padding: 5px 25px; margin-right: 10px; color: white; border: none; border-radius: 30px;
@@ -184,9 +184,9 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .filter-content span { display: inline-block; border: 1px solid #282828; border-radius: 20px; padding: 0.3rem 0.7rem; margin-right: 8px; }
 .filter-content .filter-focus { background-color: #102C57; color: white; }
 
-/* notice */
-.notice-container { flex: 1; overflow-y: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.notice-container .notice-content { padding: 1rem 0.2rem; border-bottom: 1px solid grey; }
+/* notice, voc */
+.notice-container, .voc-container { flex: 1; overflow-y: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.notice-container .notice-content, .voc-container .voc-content { padding: 1rem 0.2rem; border-bottom: 1px solid grey; }
 
 /* alert */
 .alert-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; z-index: 999;
@@ -194,25 +194,26 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 .alert-container > div:nth-child(1) { width: 100%; height: 100%; display: flex; justify-content: center;
     align-items: center; }
 .alert-content { width: 80%; height: 200px; margin: auto; text-align: center; background-color: white; border-radius: 20px;
-    padding: 10px; position: relative; }
+    padding: 10px; position: relative; max-width: 700px; }
 .alert-content.failure .img-area { width: 60px; height: 60px; margin: auto; background-color: grey; border-radius: 50%; color: white; font-size: 36px; }
 .alert-content.success .img-area { position: absolute; left: 50%; top: 20%; transform: translateX(-50%); width: 100%; padding: 0 20px; }
 .alert-content .alert-text { position: absolute; left: 50%; top: 40%; transform: translateX(-50%); width: 100%; padding: 0 20px;}
 .alert-content .alert-btn { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-top: 1px solid black;
     width: 100%; color: #5567BC; font-weight: 600; }
+.alert-content .alert-flex-btn { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-top: 1px solid black;
+    width: 100%; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 30%; padding: 0.3rem; }
 
-    
+/* text overflow ellipsis */
+.text-ellipsis { display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge-grey { border-radius: 4px; padding: 4px; background-color: #E9E9E9; }
+.badge-blue { border-radius: 4px; padding: 4px; background-color: #102C57; color: white; }
+
 /* PC (해상도 1024px)*/
 @media all and (min-width:1024px) {
     html {font-size: 30px !important;}
     .font-m {font-size: 28px;}
     .font-s {font-size: 24px !important;}
     .font-xs {font-size: 22px !important;}
-    #test {
-        width: 200px;
-        height: 200px;
-        background-color: gold;
-    }
 }
 
 /* 테블릿 세로 (해상도 768px ~ 1023px)*/
@@ -222,11 +223,6 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
     .font-s {font-size: 20px !important;}
     .font-xs {font-size: 18px !important;}
     .container { max-width: 1020px; }
-    #test {
-        width: 100px;
-        height: 100px;
-        background-color: brown;
-    }
 }
 
 /* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
@@ -236,11 +232,6 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
     .font-s {font-size: 18px !important;}
     .font-xs {font-size: 16px !important;}
     .container { max-width: 760px; }
-    #test {
-        width: 70px;
-        height: 70px;
-        background-color: wheat;
-    }
 }
 
 /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
@@ -250,11 +241,6 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
     .font-s {font-size: 14px !important;}
     .font-xs {font-size: 12px !important;}
     .container { max-width: 475px; }
-    #test {
-        width: 50px;
-        height: 50px;
-        background-color: aqua;
-    }
 
     .home-btn-container {
         display: grid !important;

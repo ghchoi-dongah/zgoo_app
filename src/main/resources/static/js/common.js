@@ -85,7 +85,7 @@ function isName(name) {
     return regex.test(name);
 }
 
-function closeAlarm(target) {
+function closeAlert(target) {
     document.getElementById(target).style.display = 'none';
 }
 

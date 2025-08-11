@@ -23,11 +23,14 @@ import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.FaqDto.FaqBaseDto;
 import zgoo.app.dto.support.NoticeDto.NoticeDetailDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
+import zgoo.app.dto.support.VocDto.VocDetailDto;
+import zgoo.app.dto.support.VocDto.VocListDto;
 import zgoo.app.service.CommonService;
 import zgoo.app.service.FaqService;
 import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
+import zgoo.app.service.VocService;
 import zgoo.app.util.CodeConstants;
 
 @Controller
@@ -40,6 +43,7 @@ public class PageController {
     private final NoticeService noticeService;
     private final CommonService commonService;
     private final FaqService faqService;
+    private final VocService vocService;
 
     /* 
      * 메인
@@ -326,6 +330,47 @@ public class PageController {
             e.getStackTrace();
             model.addAttribute("typeList", Collections.emptyList());
             return "pages/full_menu";
+        }
+    }
+
+    /* 
+     * 내 문의내역
+     */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/myvoc")
+    public String showmyvoc(Model model, Principal principal) {
+        log.info("=== MyVoc Page ===");
+
+        try {
+            List<VocListDto> vocList = this.vocService.findVocAll(principal.getName());
+            model.addAttribute("vocList", vocList);
+            
+            List<CommCdBaseDto> typeList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.VOCTYPE);
+            model.addAttribute("typeList", typeList);
+            return "pages/support/myvoc";
+        } catch (Exception e) {
+            e.getStackTrace();
+            model.addAttribute("vocList", Collections.emptyList());
+            model.addAttribute("typeList", Collections.emptyList());
+            return "pages/full_menu";
+        }
+    }
+
+    /* 
+     * 내 문의내역(상세)
+     */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/myvoc/detail/{id}")
+    public String showmyvocdetail(Model model, @PathVariable("id") Long id, Principal principal) {
+        log.info("=== MyVoc Detail Page ===");
+
+        try {
+            VocDetailDto voc = this.vocService.findVocDetailOne(id);
+            model.addAttribute("voc", voc);
+            return "pages/support/myvoc_detail";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "pages/support/myvoc";
         }
     }
 }
