@@ -47,7 +47,7 @@
             <img th:src="@{/img/charge_status_icon.png}" alt="충전현황">
             <span class="label font-m">충전현황</span>
         </div>
-        <div class="box qr">
+        <div class="box qr" onclick="FlutterBridge.postMessage('openQr'); return false;">
             <img th:src="@{/img/qr_scan_icon.png}" alt="QR 스캔">
             <span class="label font-m">QR 스캔</span>
         </div>
