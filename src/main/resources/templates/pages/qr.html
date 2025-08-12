@@ -1,0 +1,44 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="h-100">
+    <div class="qr-scan-container">
+        <div class="qr-frame">
+            <div id="preview" class="qr-preview"></div>
+
+            <!-- 네 귀퉁이 파란선 -->
+            <div class="corner top-left"></div>
+            <div class="corner top-right"></div>
+            <div class="corner bottom-left"></div>
+            <div class="corner bottom-right"></div>
+        </div>
+            <button class="scan-btn" onclick="startQrScan()">Scan QR Code</button>
+    </div>
+
+    <div th:replace="~{fragments/nav :: navFragment}"></div>
+
+    <!-- html5-qrcode 라이브러리 로드 -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <script>
+    function startQrScan() {
+        const html5QrCode = new Html5Qrcode("preview");
+
+        Html5Qrcode.getCameras().then(cameras => {
+            if (cameras && cameras.length) {
+                html5QrCode.start(
+                    cameras[0].id,
+                    { fps: 10, qrbox: 250 },
+                    qrCodeMessage => {
+                        console.log("QR 코드 인식:", qrCodeMessage);
+                        html5QrCode.stop();
+                    },
+                    errorMessage => {
+                        console.warn("QR 스캔 실패", errorMessage);
+                    }
+                );
+            }
+        }).catch(err => console.error(err));
+    }
+    </script>
+
+</div>
+</html>

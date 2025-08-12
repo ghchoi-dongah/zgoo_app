@@ -81,6 +81,21 @@ public class PageController {
     }
 
     /* 
+     * QR scan
+     */
+    @GetMapping("/qrscan")
+    public String showqrscan(Model model) {
+        log.info("=== QR Scan Page ===");
+
+        try {
+            return "pages/qr";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "redirect:/main";
+        }
+    }
+
+    /* 
      * 전체 메뉴
      */
     @GetMapping("/full-menu")
