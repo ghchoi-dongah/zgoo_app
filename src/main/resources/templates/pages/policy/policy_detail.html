@@ -1,0 +1,15 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>이용약관 및 정책</span>
+    </div>
+    <div class="mem-body p-2">
+        <div style="border-bottom: 1px solid #282828; padding: 0.7rem 0;">
+            <div th:text="|${conDto.conditionName}(${conDto.sectionName})|"></div>
+            <div th:text="|적용일시: ${#temporals.format(conDto.applyDt,'yyyy-MM-dd HH:mm:ss')}|" class="color-grey font-s mt-1"></div>
+        </div>
+        <!-- <div th:utext="${content}" style="padding: 0.5rem 0;"></div> -->
+    </div>
+</div>
+</html>

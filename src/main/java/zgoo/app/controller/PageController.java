@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -227,8 +229,14 @@ public class PageController {
             }
 
             model.addAttribute("memberForm", member);
+        } catch (EntityNotFoundException | UsernameNotFoundException e) {
+            // 회원을 못 찾았을 때 처리
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다.", e);
+        } catch (ResponseStatusException e) {
+            // 위에서 던진 권한 예외 그대로 전달
+            throw e;
         } catch (Exception e) {
-            e.getStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.", e);
         }
 
         return "pages/member_update/member_update";
@@ -406,6 +414,40 @@ public class PageController {
         } catch (Exception e) {
             e.getStackTrace();
             return "pages/full_menu";
+        }
+    }
+
+    /* 
+     * 이용약관 및 정책
+     */
+    @GetMapping("/mypage/policy")
+    public String showpolicy(Model model) {
+        log.info("=== Policy Page ===");
+
+        try {
+            List<MemberConditionDto> conList = this.memberService.findAllConditionList();
+            model.addAttribute("conList", conList);
+            return "pages/policy/policy";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "pages/full_menu";
+        }
+    }
+
+    /* 
+     * 약관(상세)
+     */
+    @GetMapping("/mypage/policy/detail/{code}")
+    public String showcondetail(Model model, @PathVariable("code") String code) {
+        log.info("=== Detail Policy Page ===");
+
+        try {
+            MemberConditionDto conDto = this.myPageService.findConditionByConditionCode(code);
+            model.addAttribute("conDto", conDto);
+            return "pages/policy/policy_detail";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "pages/policy/policy";
         }
     }
 }

@@ -34,4 +34,21 @@ public class ConditionRepositoryCustomImpl implements ConditionRepositoryCustom 
                 .orderBy(conditionCode.section.desc(), conditionCode.conditionCode.desc())
                 .fetch();
     }
+
+    @Override
+    public MemberConditionDto findConditionByConditionCode(String code) {
+        return queryFactory
+                .select(Projections.fields(MemberConditionDto.class,
+                    conditionCode.conditionCode.as("conditionCode"),
+                    conditionCode.conditionName.as("conditionName"),
+                    conditionCode.section.as("section"),
+                    Expressions.stringTemplate("IF({0} = 'Y', '필수', '선택')", conditionCode.section).as("sectionName"),
+                    conditionVersion.version.as("agreeVersion"),
+                    conditionVersion.applyDt.as("applyDt")))
+                .from(conditionCode)
+                .leftJoin(conditionVersion).on(conditionCode.eq(conditionVersion.condition),
+                    conditionVersion.applyYn.eq("Y"))
+                .where(conditionCode.conditionCode.eq(code))
+                .fetchOne();
+    }
 }

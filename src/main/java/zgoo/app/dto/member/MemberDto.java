@@ -102,6 +102,7 @@ public class MemberDto {
         private String agreeYnCheck;
         private String stringAgreeDt;
         private LocalDateTime agreeDt;
+        private LocalDateTime applyDt;
     }
 
     @Data

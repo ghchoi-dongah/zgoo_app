@@ -1,0 +1,16 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>이용약관 및 정책</span>
+    </div>
+    <div class="mem-body p-2">
+        <div class="term-container font-m" th:each="con : ${conList}">
+            <a th:href="@{/mypage/policy/detail/{code}(code=${con.conditionCode})}" class="text-decoration-none">
+                <span th:text="${con.conditionName}"></span>
+                <span class="right-vertical-center"><i class="bi bi-chevron-right"></i></span>
+            </a>
+        </div>
+    </div>
+</div>
+</html>

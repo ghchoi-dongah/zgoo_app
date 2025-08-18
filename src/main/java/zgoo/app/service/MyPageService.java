@@ -14,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import zgoo.app.domain.member.Member;
 import zgoo.app.dto.hist.ChargingHistDto;
 import zgoo.app.dto.member.MemberDto.MemberCarDto;
+import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.repository.condition.ConditionRepository;
 import zgoo.app.repository.hist.ChargingHistRepository;
 import zgoo.app.repository.member.MemberCarRepository;
 import zgoo.app.repository.member.MemberRepository;
@@ -28,6 +30,7 @@ public class MyPageService {
 
     public final MemberRepository memberRepository;
     public final MemberCarRepository memberCarRepository;
+    public final ConditionRepository conditionRepository;
     public final ChargingHistRepository chargingHistRepository;
 
     // 회원정보 조회
@@ -127,6 +130,18 @@ public class MyPageService {
         } catch (Exception e) {
             log.error("[MyPageService >> findChgHistAll] error: {}", e.getMessage(), e);
             return new ArrayList<>();
+        }
+    }
+    
+    // 약관 조회 by code
+    public MemberConditionDto findConditionByConditionCode(String code) {
+        try {
+            MemberConditionDto conDto = this.conditionRepository.findConditionByConditionCode(code);
+            log.info("[MyPageService >> findConditionByConditionCode] conDto: {}", conDto.toString());
+            return conDto;
+        } catch (Exception e) {
+            log.error("[MyPageService >> findConditionByConditionCode] error: {}", e.getMessage(), e);
+            return null;
         }
     }
 }
