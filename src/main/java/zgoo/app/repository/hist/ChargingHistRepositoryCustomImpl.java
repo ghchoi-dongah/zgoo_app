@@ -51,6 +51,7 @@ public class ChargingHistRepositoryCustomImpl implements ChargingHistRepositoryC
                 .leftJoin(csInfo).on(cpInfo.stationId.eq(csInfo))
                 .leftJoin(member).on(hist.idTag.eq(member.idTag))
                 .where(builder)
+                .orderBy(hist.startTime.desc())
                 .fetch();
     }
 }

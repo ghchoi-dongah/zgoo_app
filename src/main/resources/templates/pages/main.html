@@ -4,7 +4,9 @@
 
     <div id="loginGuide" class="position-relative w-100 mt-5" sec:authorize="isAnonymous()">
         <div class="fw-bold">로그인 하시면</div>
-        <button type="button" class="button-bw-r font-s" style="position: absolute; right: 0; top: 0;">로그인</button>
+        <span class="span-bw-r font-s" style="position: absolute; right: 0; top: 0;">
+            <a th:href="@{/login}">로그인</a>
+        </span>
         <div class="mt-2">다양한 서비스를 이용하실 수 있어요!</div>
     </div>
     <div id="carouselExampleIndicators" class="carousel slide mt-3" style="height: 35%; background-color: grey;" sec:authorize="isAnonymous()">
@@ -39,7 +41,7 @@
 
     <!-- 충전이력, 충전현황, QR -->
     <div class="home-btn-container" sec:authorize="isAuthenticated()">
-        <div class="box charge-history">
+        <div class="box charge-history" onclick="goPage('/mypage/history/charge')">
             <img th:src="@{/img/charge_history_icon.png}" alt="충전이력">
             <span class="label font-m">충전이력</span>
         </div>

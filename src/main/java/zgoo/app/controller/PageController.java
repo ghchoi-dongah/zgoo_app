@@ -1,6 +1,7 @@
 package zgoo.app.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.code.CodeDto.CommCdBaseDto;
+import zgoo.app.dto.hist.ChargingHistDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.FaqDto.FaqBaseDto;
@@ -386,6 +388,24 @@ public class PageController {
         } catch (Exception e) {
             e.getStackTrace();
             return "pages/support/myvoc";
+        }
+    }
+
+    /* 
+     * 충전이력
+     */
+    @GetMapping("/mypage/history/charge")
+    public String showchghist(Model model, Principal principal) {
+        log.info("=== Charging Hist Page ===");
+
+        try {
+            List<ChargingHistDto> histList = this.myPageService.findChgHistAll(principal.getName(),
+                LocalDate.now(), LocalDate.now());
+            model.addAttribute("histList", histList);
+            return "pages/hist/charge_hist";
+        } catch (Exception e) {
+            e.getStackTrace();
+            return "pages/full_menu";
         }
     }
 }

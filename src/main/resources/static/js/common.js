@@ -108,3 +108,11 @@ function goPageWithoutHistory(url) {
 //         headerContent.classList.remove('scrolled');
 //     }
 // }
+
+function goPage(url) {
+    if (!url) {
+        console.error("이동할 URL이 저장되지 않았습니다.");
+        return;
+    }
+    window.location.href = url;
+}

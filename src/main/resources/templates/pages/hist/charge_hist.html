@@ -1,0 +1,82 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="container">
+    <div class="mem-header">
+        <span onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></span>
+        <span>충전이력</span>
+    </div>
+    <div class="" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="date-select-container">
+            <div class="date-content" id="startDate"  onclick="selectDate('startDateText')">
+                <span class="font-m" id="startDateText" data-value=""></span>
+                <span class="icon"><i class="bi bi-calendar"></i></span>
+            </div>
+            <span class="my-1" style="flex: 0 0 auto;">~</span>
+             <div class="date-content" id="endDate"  onclick="selectDate('endDateText')">
+                <span class="font-m" id="endDateText" data-value=""></span>
+                <span class="icon"><i class="bi bi-calendar"></i></span>
+            </div>
+            <button type="button" class="button-bw-s font-s m-0" style="flex: 0 0 auto;" onclick="searchHist()">조회</button>
+        </div>
+
+        <div class="chghist-table-container">
+            <table class="font-xs chghist-table">
+                <thead>
+                    <tr>
+                        <th scope="col">NO</th>
+                        <th scope="col">충전소명</th>
+                        <th scope="col">시작일시</th>
+                        <th scope="col">종료일시</th>
+                        <th scope="col">충전시간</th>
+                        <th scope="col">충전량(kWh)</th>
+                        <th scope="col">적용단가(원)</th>
+                        <th scope="col">결제금액(원)</th>
+                    </tr>
+                </thead>
+                <tbody id="histTable">
+                    <tr th:each="data, num : ${histList}">
+                        <td th:text="${num.count}"></td>
+                        <td th:text="${data.stationName}"></td>
+                        <td th:text="${#temporals.format(data.chgStartTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${#temporals.format(data.chgEndTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td
+                            th:text="${data.chgTime != null ? (#numbers.formatInteger(data.chgTime / 3600, 2) + ':' + #numbers.formatInteger((data.chgTime % 3600) / 60, 2) + ':' + #numbers.formatInteger(data.chgTime % 60, 2)) : ''}">
+                        </td>
+                        <td
+                            th:text="${data.chgAmount != null ? #numbers.formatDecimal(data.chgAmount, 1, 2) : '0.0'}">
+                        </td>
+                        <td th:text="${data.unitCost}"></td>
+                        <td
+                            th:text="${data.realCost != null ? #numbers.formatInteger(data.realCost, 0, 'COMMA') : '0'}">
+                        </td>
+                    </tr>
+                    <tr th:if="${histList.size() == 0}">
+                        <td colspan="8" class="text-center table-border-bottom">충전 이력이 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="date-frame" id="date">
+        <div class="date-content">
+            <span class="close" onclick="closeAlert('date')">
+                <i class="bi bi-x-circle-fill" style="color: grey; font-size: 24px;"></i>
+            </span>
+            <div class="title">날짜 선택</div>
+            <div class="year-month-select">
+                <div class="custom-dropdown" id="yearDropdown">
+                    <div class="selected" data-value=""></div>
+                    <ul class="options"></ul>
+                </div>
+                <div class="custom-dropdown" id="monthDropdown">
+                    <div class="selected" data-value=""></div>
+                    <ul class="options"></ul>
+                </div>
+            </div>
+            <button type="button" onclick="checkDate()">확인</button>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/charge_hist.js}"></script>
+</div>
+</html>

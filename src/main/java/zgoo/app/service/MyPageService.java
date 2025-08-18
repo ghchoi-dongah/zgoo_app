@@ -1,7 +1,9 @@
 package zgoo.app.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.domain.member.Member;
+import zgoo.app.dto.hist.ChargingHistDto;
 import zgoo.app.dto.member.MemberDto.MemberCarDto;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
+import zgoo.app.repository.hist.ChargingHistRepository;
 import zgoo.app.repository.member.MemberCarRepository;
 import zgoo.app.repository.member.MemberRepository;
 import zgoo.app.util.EncryptionUtils;
@@ -24,6 +28,7 @@ public class MyPageService {
 
     public final MemberRepository memberRepository;
     public final MemberCarRepository memberCarRepository;
+    public final ChargingHistRepository chargingHistRepository;
 
     // 회원정보 조회
     public MemberRegDto findMemberInfo(String memLoginId) {
@@ -101,6 +106,27 @@ public class MyPageService {
         } catch (Exception e) {
             log.error("[MyPageService >> updatePasswordInfo] error: {}", e.getMessage(), e);
             return null;
+        }
+    }
+
+    // 충전이력 조회
+    public List<ChargingHistDto> findChgHistAll(String memLoginId, LocalDate startTime, LocalDate endTime) {
+        try {
+            Member member = this.memberRepository.findByMemLoginId(memLoginId)
+                    .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+            String idTag = member.getIdTag();
+            log.info("[MyPageService >> findChgHistAll] idTag: {}", idTag);
+
+            LocalDateTime startOfMonth = startTime.withDayOfMonth(1).atStartOfDay();
+            LocalDateTime endOfMonth = endTime.withDayOfMonth(endTime.lengthOfMonth()).atTime(23, 29, 59);
+            log.info("[MyPageService >> findChgHistAll] startOfMonth: {}, endOfMonth: {}", startOfMonth, endOfMonth);
+
+            List<ChargingHistDto> histList = this.chargingHistRepository.findAllByIdTag(idTag, startOfMonth, endOfMonth);
+            log.info("[MyPageService >> findChgHistAll] histList: {}", histList.toString());
+            return histList;
+        } catch (Exception e) {
+            log.error("[MyPageService >> findChgHistAll] error: {}", e.getMessage(), e);
+            return new ArrayList<>();
         }
     }
 }

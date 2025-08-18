@@ -1,6 +1,9 @@
 package zgoo.app.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import zgoo.app.dto.hist.ChargingHistDto;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.FaqDto.FaqBaseDto;
 import zgoo.app.dto.support.NoticeDto.NoticeListDto;
 import zgoo.app.service.FaqService;
-import zgoo.app.service.MemberService;
 import zgoo.app.service.MyPageService;
 import zgoo.app.service.NoticeService;
 
@@ -30,7 +33,6 @@ import zgoo.app.service.NoticeService;
 @Slf4j
 public class MyPageController {
 
-    private final MemberService memberService;
     private final MyPageService myPageService;
     private final NoticeService noticeService;
     private final FaqService faqService;
@@ -120,5 +122,36 @@ public class MyPageController {
             log.error("[MyPageController >> getFaqBySection] error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    // 충전이력 조회
+    @GetMapping("/chghist/get")
+    public ResponseEntity<List<ChargingHistDto>> getChgHist(@RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate, Principal principal) {
+        log.info("=== get charge hist list ===");
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            startDate = fixYearMonth(startDate);
+            endDate = fixYearMonth(endDate);
+
+            LocalDate startOfMonth = YearMonth.parse(startDate, formatter).atDay(1);
+            LocalDate endOfMonth = YearMonth.parse(endDate, formatter).atEndOfMonth();
+
+            List<ChargingHistDto> histList = this.myPageService.findChgHistAll(principal.getName(), 
+                startOfMonth, endOfMonth);
+            return ResponseEntity.ok(histList);
+        } catch (Exception e) {
+            log.error("[MyPageController >> getChgHist] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 한 자리 월을 두 자리로 보정
+    private String fixYearMonth(String ym) {
+        String[] parts = ym.split("-");
+        String year = parts[0];
+        String month = parts[1].length() == 1 ? "0" + parts[1] : parts[1];
+        return year + "-" + month;
     }
 }
