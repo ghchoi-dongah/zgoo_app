@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import zgoo.app.dto.hist.ChargingHistDto;
+import zgoo.app.dto.hist.ChargingHistDto.ChgHistListDto;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.FaqDto.FaqBaseDto;
@@ -126,7 +126,7 @@ public class MyPageController {
 
     // 충전이력 조회
     @GetMapping("/chghist/get")
-    public ResponseEntity<List<ChargingHistDto>> getChgHist(@RequestParam("startDate") String startDate,
+    public ResponseEntity<List<ChgHistListDto>> getChgHist(@RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate, Principal principal) {
         log.info("=== get charge hist list ===");
 
@@ -138,7 +138,7 @@ public class MyPageController {
             LocalDate startOfMonth = YearMonth.parse(startDate, formatter).atDay(1);
             LocalDate endOfMonth = YearMonth.parse(endDate, formatter).atEndOfMonth();
 
-            List<ChargingHistDto> histList = this.myPageService.findChgHistAll(principal.getName(), 
+            List<ChgHistListDto> histList = this.myPageService.findChgHistAll(principal.getName(), 
                 startOfMonth, endOfMonth);
             return ResponseEntity.ok(histList);
         } catch (Exception e) {

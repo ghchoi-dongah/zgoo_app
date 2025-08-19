@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.domain.member.Member;
-import zgoo.app.dto.hist.ChargingHistDto;
+import zgoo.app.dto.hist.ChargingHistDto.ChgHistListDto;
+import zgoo.app.dto.hist.ChargingHistDto.ChgHistSummaryDto;
 import zgoo.app.dto.member.MemberDto.MemberCarDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberPasswordDto;
@@ -113,7 +114,7 @@ public class MyPageService {
     }
 
     // 충전이력 조회
-    public List<ChargingHistDto> findChgHistAll(String memLoginId, LocalDate startTime, LocalDate endTime) {
+    public List<ChgHistListDto> findChgHistAll(String memLoginId, LocalDate startTime, LocalDate endTime) {
         try {
             Member member = this.memberRepository.findByMemLoginId(memLoginId)
                     .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
@@ -121,10 +122,10 @@ public class MyPageService {
             log.info("[MyPageService >> findChgHistAll] idTag: {}", idTag);
 
             LocalDateTime startOfMonth = startTime.withDayOfMonth(1).atStartOfDay();
-            LocalDateTime endOfMonth = endTime.withDayOfMonth(endTime.lengthOfMonth()).atTime(23, 29, 59);
+            LocalDateTime endOfMonth = endTime.withDayOfMonth(endTime.lengthOfMonth()).atTime(23, 59, 59);
             log.info("[MyPageService >> findChgHistAll] startOfMonth: {}, endOfMonth: {}", startOfMonth, endOfMonth);
 
-            List<ChargingHistDto> histList = this.chargingHistRepository.findAllByIdTag(idTag, startOfMonth, endOfMonth);
+            List<ChgHistListDto> histList = this.chargingHistRepository.findAllByIdTag(idTag, startOfMonth, endOfMonth);
             log.info("[MyPageService >> findChgHistAll] histList: {}", histList.toString());
             return histList;
         } catch (Exception e) {
@@ -141,6 +142,20 @@ public class MyPageService {
             return conDto;
         } catch (Exception e) {
             log.error("[MyPageService >> findConditionByConditionCode] error: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    // 당월충전내역
+    public ChgHistSummaryDto getCurrentMonthChgSummary(String memLoginId) {
+        try {
+            Member member = this.memberRepository.findByMemLoginId(memLoginId)
+                    .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+            ChgHistSummaryDto chgHist = this.chargingHistRepository.getCurrentMonthChgSummary(member.getIdTag());
+            log.info("[MyPageService >> getCurrentMonthChgSummary] chgHist: {}", chgHist.toString());
+            return chgHist;
+        } catch (Exception e) {
+            log.error("[MyPageService >> getCurrentMonthChgSummary] error: {}", e.getMessage(), e);
             return null;
         }
     }

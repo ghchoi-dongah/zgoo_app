@@ -60,15 +60,18 @@
         <div class="mt-2 p-3 font-s" style="background-color: #F8F8F8; border-radius: 16px;">
             <div class="row mb-2">
                 <div class="col">충전량</div>
-                <div class="col" style="text-align: end;">0kWh</div>
+                <div class="col text-end"
+                    th:text="${chgHist.chgAmount != null ? #numbers.formatDecimal(chgHist.chgAmount, 1, 2) : '0.0'} + 'kWh'"></div>
             </div>
             <div class="row mb-2">
                 <div class="col">결제금액</div>
-                <div class="col" style="text-align: end;">0원</div>
+                <div class="col text-end"
+                    th:text="${chgHist.realCost != null ? #numbers.formatInteger(chgHist.realCost, 0, 'COMMA') : '0'} + '원'"></div>
             </div>
             <div class="row">
                 <div class="col">충전횟수</div>
-                <div class="col" style="text-align: end;">0회</div>
+                <div class="col text-end"
+                    th:text="${chgHist.chgCnt != null ? chgHist.chgCnt : '0'} + '회'"></div>
             </div>
         </div>
     </div>

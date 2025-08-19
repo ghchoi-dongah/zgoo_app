@@ -21,7 +21,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.dto.code.CodeDto.CommCdBaseDto;
-import zgoo.app.dto.hist.ChargingHistDto;
+import zgoo.app.dto.hist.ChargingHistDto.ChgHistListDto;
+import zgoo.app.dto.hist.ChargingHistDto.ChgHistSummaryDto;
 import zgoo.app.dto.member.MemberDto.MemberConditionDto;
 import zgoo.app.dto.member.MemberDto.MemberRegDto;
 import zgoo.app.dto.support.FaqDto.FaqBaseDto;
@@ -53,16 +54,22 @@ public class PageController {
      * 메인
      */
     @GetMapping("/main")
-    public String showmain(Model model) {
+    public String showmain(Model model, Principal principal) {
         log.info("=== Main Page ===");
 
         try {
             List<NoticeListDto> noticeList = this.noticeService.getRecentNotices();
             model.addAttribute("noticeList", noticeList);
 
+            if (principal != null) {
+                ChgHistSummaryDto chgHist = this.myPageService.getCurrentMonthChgSummary(principal.getName());
+                model.addAttribute("chgHist", chgHist);
+            }
+
         } catch (Exception e) {
             e.getStackTrace();
             model.addAttribute("noticeList", Collections.emptyList());
+            model.addAttribute("chgHist", null);
         }
         
         return "pages/main";
@@ -407,7 +414,7 @@ public class PageController {
         log.info("=== Charging Hist Page ===");
 
         try {
-            List<ChargingHistDto> histList = this.myPageService.findChgHistAll(principal.getName(),
+            List<ChgHistListDto> histList = this.myPageService.findChgHistAll(principal.getName(),
                 LocalDate.now(), LocalDate.now());
             model.addAttribute("histList", histList);
             return "pages/hist/charge_hist";
