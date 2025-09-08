@@ -5,6 +5,9 @@ public class CodeConstants {
     public static final String NOTICETYPECD   = "NOTICETYPECD";   // 공지유형
     public static final String FAQKIND        = "FAQKIND";        // FAQ 구분코드
     public static final String VOCTYPE        = "VOCTYPE";        // 문의유형
+    public static final String CONNTYPE       = "CONNTYPE";       // 커넥터타입
+    public static final String CSFSUB         = "CSFSUB";         // 충전소시설구분
+    public static final String CSFACILITY     = "CSFACILITY";     // 충전소시설유형
 
     // common code
     // 회원상태코드
@@ -20,4 +23,7 @@ public class CodeConstants {
     // 조치상태
     public static final String STANDBY        = "STANDBY";      // 대기
     public static final String COMPLETE       = "COMPLETE";     // 완료
+
+    // radiusInKm
+    public static final Double RADIUS         = 10.0;
 }
