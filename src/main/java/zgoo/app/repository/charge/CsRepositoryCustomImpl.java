@@ -2,6 +2,7 @@ package zgoo.app.repository.charge;
 
 import java.util.List;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.domain.charge.QCsInfo;
 import zgoo.app.dto.charge.CsInfoDto.CsInfoDetailDto;
+import zgoo.app.util.CodeConstants;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,9 +52,30 @@ public class CsRepositoryCustomImpl implements CsRepositoryCustom {
     }
 
     @Override
+    public List<CsInfoDetailDto> searchStations(String keyword, String option) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (option.equals(CodeConstants.STATION)) {
+            builder.and(csInfo.stationName.containsIgnoreCase(keyword));
+        } else if (option.equals(CodeConstants.ADDRESS)) {
+            builder.and(csInfo.address.containsIgnoreCase(keyword));
+        }
+
+        List<CsInfoDetailDto> csList = queryFactory.select(Projections.fields(CsInfoDetailDto.class,
+                csInfo.id.as("stationId"),
+                csInfo.stationName.as("stationName"),
+                csInfo.address.as("address")))
+                .from(csInfo)
+                .where(builder)
+                .fetch();
+        return csList;
+    }
+
+    @Override
     public CsInfoDetailDto findStationOne(String stationId) {
         CsInfoDetailDto dto = queryFactory.select(Projections.fields(CsInfoDetailDto.class,
                 csInfo.id.as("stationId"),
+                csInfo.stationName.as("stationName"),
                 csInfo.address.as("address"),
                 csInfo.addressDetail.as("addressDetail"),
                 csInfo.latitude.as("latitude"),

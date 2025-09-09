@@ -83,12 +83,19 @@ public class PageController {
         log.info("=== Find Charger Page ===");
 
         try {
+            List<CommCdBaseDto> conTypeList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.CONNTYPE); // 커넥터타입
+            model.addAttribute("conTypeList", conTypeList);
 
+            List<CommCdBaseDto> subList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.CSFSUB); // 충전소시설구분
+            model.addAttribute("subList", subList);
+
+            List<CommCdBaseDto> facList = this.commonService.findCommonCdNamesByGrpcd(CodeConstants.CSFACILITY); // 충전소시설유형
+            model.addAttribute("facList", facList);
         } catch (Exception e) {
             e.getStackTrace();
         }
 
-        return "pages/find_charger";
+        return "pages/map";
     }
 
     /* 

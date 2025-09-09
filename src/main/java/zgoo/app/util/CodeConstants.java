@@ -26,4 +26,8 @@ public class CodeConstants {
 
     // radiusInKm
     public static final Double RADIUS         = 10.0;
+
+    // etc
+    public static final String ADDRESS        = "ADDRESS";
+    public static final String STATION        = "STATION";
 }

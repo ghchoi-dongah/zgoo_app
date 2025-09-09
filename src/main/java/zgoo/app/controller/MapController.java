@@ -40,4 +40,38 @@ public class MapController {
         }
 
     }
+
+    @GetMapping("/search/station")
+    public ResponseEntity<Map<String, Object>> searchStations(@RequestParam("keyword") String keyword,
+            @RequestParam("option") String option) {
+        log.info("=== search stations by keyword ===");
+        log.info("[MapController > searchStations] keyword: {}, option: {}", keyword, option);
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<CsInfoDetailDto> csList = this.mapService.searchStations(keyword, option);
+            response.put("csList", csList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("[MapController >> searchStations] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/find/station")
+    public ResponseEntity<Map<String, Object>> findStationOne(@RequestParam("stationId") String stationId) {
+        log.info("=== search station info ===");
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            CsInfoDetailDto dto = this.mapService.findStationOne(stationId);
+            response.put("cs", dto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("[MapController >> searchStationOne] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

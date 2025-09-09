@@ -89,6 +89,10 @@ function closeAlert(target) {
     document.getElementById(target).style.display = 'none';
 }
 
+function openAlert(target) {
+    document.getElementById(target).style.display = 'block';
+}
+
 function closeAlarmAndReplace(target, url) {
     document.getElementById(target).style.display = 'none';
     location.replace(url);
