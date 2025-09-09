@@ -1,0 +1,96 @@
+<html layout:decorate="~{fragments/layout}">
+<div layout:fragment="content" class="h-100">
+    <div class="search-container">
+        <!-- filter -->
+        <span class="filter" id="filter" onclick="openAlert('filterSetting')"><i class="bi bi-filter-circle-fill"></i></span>
+        <!-- 검색창 -->
+        <span class="search-content" id="searchContainer">
+            <div class="search-box" id="searchBox">충전소, 장소 검색</div>
+            <span class="icon"><i class="bi bi-search"></i></span>
+        </span>
+        <!-- route -->
+        <span id="route" class="route"><i class="fa-solid fa-diamond-turn-right"></i></span>
+        <!-- location -->
+        <span class="location"><i class="fa-solid fa-location-crosshairs"></i></span>
+    </div>
+
+
+    <div class="w-100 h-100" id="map"></div>
+
+    <div th:replace="~{fragments/nav :: navFragment}"></div>
+
+    <div id="filterSetting" class="top-layer">
+        <div class="container">
+            <div class="mem-header">
+                <span onclick="closeAlert('filterSetting')"><i class="fa-solid fa-chevron-left"></i></span>
+                <span>필터설정</span>
+            </div>
+            <div class="mem-body p-2">
+                <div class="filter-op mb-4">
+                    <p>충전 속도</p>
+                    <span class="font-m"><i class="bi bi-lightning-charge"></i>7kw</span>
+                    <span class="font-m"><i class="bi bi-lightning-charge"></i>50kw</span>
+                    <span class="font-m"><i class="bi bi-lightning-charge"></i>100kw</span>
+                </div>
+                <div class="filter-op mb-4">
+                    <p>충전기 타입</p>
+                    <span th:each="data : ${conTypeList}" th:text="${data.commonCodeName}" th:id="${data.commonCode}" class="font-m"></span>
+                </div>
+                <div class="filter-op mb-4">
+                    <p>충전소시설구분</p>
+                    <span th:each="data : ${subList}" th:text="${data.commonCodeName}" th:id="${data.commonCode}" class="font-m"></span>
+                </div>
+                <div class="filter-op mb-4">
+                    <p>충전소시설유형</p>
+                    <span th:each="data : ${facList}" th:text="${data.commonCodeName}" th:id="${data.commonCode}" class="font-m"></span>
+                </div>
+                <div class="filter-op mb-4">
+                    <p>접근</p>
+                    <span class="font-m">개방</span>
+                    <span class="font-m">비개방</span>
+                </div>
+            </div>
+            <div class="btn-display-flex">
+                <button class="btn btn-reset">초기화</button>
+                <button class="btn btn-apply">적용</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="searchSetting" class="top-layer">
+        <div class="container">
+            <div class="mem-header">
+                <span onclick="closeAlert('searchSetting')"><i class="fa-solid fa-chevron-left"></i></span>
+                <span>검색</span>
+            </div>
+            <div class="mem-body p-2">
+                <div class="station-search mb-5">
+                    <input type="text" id="csSearch" autocomplete="off"/>
+                    <span ><i class="bi bi-search"></i></span>
+                </div>
+                <div class="font-m">
+                    <span class="me-3 text-focus" id="STATION">충전소</span>
+                    <span id="ADDRESS">주소</span>
+                </div>
+                <div id="searchResult" class="font-m">
+                    <div class="csinfo-n">
+                        <i class="bi bi-search"></i>
+                        <span>검색 내역이 없습니다.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2627a1d15418d5bd6f92dfadded8a675&libraries=services,clusterer"></script>
+    <!-- <script>
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울 시청
+            level: 3
+        };
+        var map = new kakao.maps.Map(container, options);
+    </script> -->
+    <script type="text/javascript" th:src="@{/js/map.js}"></script>
+</div>
+</html>
