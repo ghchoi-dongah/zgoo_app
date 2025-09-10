@@ -265,12 +265,16 @@ button.bottom-btn:disabled, button.regist-btn:disabled { background-color: grey;
 
 /* filter option */
 .filter-op span { border: 1px solid #E0E0E0; border-radius: 20px; padding: 4px 10px; margin-right: 8px; margin-bottom: 6px; display: inline-block; }
+.filter-op span.selected,
+.filter-op span[aria-pressed="true"] { border: 1px solid #102C57; color: #102C57; background-color: #F3F6FF; }
 
 /* station search */
 .btn-display-flex { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
 .btn-display-flex .btn { border: 1px solid #0e2a4a; width: 100%; }
-.btn-display-flex .btn-reset { color: #0e2a4a; background: #fff; }
-.btn-display-flex .btn-apply { color: #fff; background: #0e2a4a; }
+.btn-display-flex .btn-reset { color: #0e2a4a !important; background: #fff !important; }
+.btn-display-flex .btn-reset:hover,.btn-display-flex .btn-reset:active { background: #f7f7f7 !important; border: 1px solid grey; }
+.btn-display-flex .btn-apply { color: #fff !important; background: #0e2a4a !important; }
+.btn-display-flex .btn-apply:hover, .btn-display-flex .btn-apply:active { color: white !important; background: #174579 !important; }
 .station-search { position: relative; }
 .station-search > input { width: 100%; display: block; padding: .7rem 1.5rem .7rem 1rem; font-size: 1rem; font-weight: 400; line-height: 1.5;
     border: 1px solid #dee2e6; border-radius: 0.375rem; }
