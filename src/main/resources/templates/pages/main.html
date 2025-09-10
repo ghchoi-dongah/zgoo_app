@@ -79,13 +79,12 @@
     <div class="position-relative w-100 mt-3" sec:authorize="isAuthenticated()">
         <div class="fw-bold">즐겨찾는 충전소</div>
         <span class="chevron-pos"><i class="bi bi-chevron-right"></i></span>
-        <div></div>
+        <div id="myStation" class="w-100 station-list"></div>
     </div>
 
     <div class="position-relative w-100 mt-3" id="nearStation">
         <div class="fw-bold">내주변 충전소</div>
-        <span class="chevron-pos"><i class="bi bi-chevron-right"></i></span>
-        <div></div>
+        <div id="nearbyStation" class="w-100 station-list"></div>
     </div>
 
     <div class="position-relative w-100 mt-3" id="notice">
@@ -104,5 +103,79 @@
     </div>
 
     <div th:replace="~{fragments/nav :: navFragment}"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        console.log('lat: ', lat);
+                        console.log('lng: ', lng);
+
+                        fetch(`/nearby/station/top3?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then((data) => {
+                                console.log(data.csList);
+                                const nearbyStation = document.getElementById('nearbyStation');
+                                nearbyStation.innerHTML = '';
+
+                                if (!Array.isArray(data.csList) || data.csList.length === 0) {
+                                    nearbyStation.innerHTML = `
+                                        <div class="station-empty">
+                                            주변 충전소 정보를 불러올 수 없습니다.
+                                        </div>`;
+                                    return;
+                                }
+
+                                const html = data.csList.map(cs => `
+                                    <div class="station-item" data-id="${cs.stationId}">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="font-m">${cs.stationName ?? '이름 없음'}</span>
+                                            <span class="font-m text-muted">
+                                                <i class="fa-solid fa-route me-2"></i>
+                                                ${cs.distance != null ? cs.distance + 'm' : '-'}
+                                            </span>
+                                        </div>
+                                        <div class="font-s text-secondary mt-2">
+                                            ${cs.address ?? '주소 정보 없음'}
+                                        </div>
+                                    </div>
+                                `).join('');
+
+                                nearbyStation.innerHTML = html;
+                            })
+                            .catch((error) => {
+                                console.error('Fetch error:', err);
+                                const nearbyStation = document.getElementById('nearbyStation');
+                                nearbyStation.innerHTML = `
+                                    <div class="station-error">
+                                        데이터를 불러오는 중 오류가 발생했습니다.
+                                    </div>`;
+                            });
+                    },
+                    error => {
+                        console.warn("Geolocation error: ",error);
+                    }
+                );
+            } else {
+                console.warn("Geolocation is not supported by this browser");
+            }
+        });
+    </script>
+
+    
+
 </div>
 </html>

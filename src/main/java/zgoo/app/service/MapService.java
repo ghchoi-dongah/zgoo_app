@@ -50,4 +50,15 @@ public class MapService {
             return new ArrayList<>();
         }
     }
+
+    public List<CsInfoDetailDto> findNearbyStationsTop3(double lat, double lng) {
+        try {
+            List<CsInfoDetailDto> csList = this.csRepository.findStationsWithinRadiusTop3(lat, lng, CodeConstants.RADIUS);
+            log.info("[MapService >> findNearbyStationsTop3] csList: {}", csList.toString());
+            return csList;
+        } catch (Exception e) {
+            log.error("[MapService >> findNearbyStationsTop3] error: {}", e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
 }

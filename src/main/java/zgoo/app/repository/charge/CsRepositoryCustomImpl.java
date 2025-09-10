@@ -52,6 +52,34 @@ public class CsRepositoryCustomImpl implements CsRepositoryCustom {
     }
 
     @Override
+    public List<CsInfoDetailDto> findStationsWithinRadiusTop3(double lat, double lng, double radius) {
+        NumberExpression<Integer> distance = Expressions.numberTemplate(Integer.class,
+        "ROUND(6371 * 1000 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) + sin(radians({0})) * sin(radians({1}))))",
+                lat, csInfo.latitude, csInfo.longitude, lng);
+
+        double mRadius = radius * 1000;
+        
+        List<CsInfoDetailDto> csList = queryFactory.select(Projections.fields(CsInfoDetailDto.class,
+                csInfo.id.as("stationId"),
+                csInfo.stationName.as("stationName"),
+                csInfo.address.as("address"),
+                csInfo.addressDetail.as("addressDetail"),
+                csInfo.latitude.as("latitude"),
+                csInfo.longitude.as("longitude"),
+                Expressions.stringTemplate("IF({0}  = 'Y', '유료', '무료')", csInfo.parkingFeeYn).as("parkingFee"),
+                csInfo.openStartTime.as("openStartTime"),
+                csInfo.openEndTime.as("openEndTime"),
+                distance.as("distance")))
+                .from(csInfo)
+                .where(distance.loe(mRadius))
+                .orderBy(distance.asc())
+                .limit(3)
+                .fetch();
+
+        return csList;
+    }
+
+    @Override
     public List<CsInfoDetailDto> searchStations(String keyword, String option) {
         BooleanBuilder builder = new BooleanBuilder();
 

@@ -74,4 +74,21 @@ public class MapController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/nearby/station/top3")
+    public ResponseEntity<Map<String, Object>> getNearbyStationsTop3(@RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude) {
+        log.info("=== find nearby charging stations top3 ===");
+
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            List<CsInfoDetailDto> csList = this.mapService.findNearbyStationsTop3(latitude, longitude);
+            response.put("csList", csList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("[MapController >> getNearbyStationsTop3] error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
