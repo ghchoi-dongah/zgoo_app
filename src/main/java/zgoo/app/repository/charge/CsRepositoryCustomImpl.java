@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import zgoo.app.domain.charge.QCsInfo;
+import zgoo.app.domain.code.QCommonCode;
 import zgoo.app.dto.charge.CsInfoDto.CsInfoDetailDto;
 import zgoo.app.util.CodeConstants;
 
@@ -19,6 +20,7 @@ import zgoo.app.util.CodeConstants;
 public class CsRepositoryCustomImpl implements CsRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QCsInfo csInfo = QCsInfo.csInfo;
+    QCommonCode opStatusCode = new QCommonCode("opStatus");
 
     @Override
     public List<CsInfoDetailDto> findStationsWithinRadius(double lat, double lng, double radius) {
@@ -105,13 +107,15 @@ public class CsRepositoryCustomImpl implements CsRepositoryCustom {
                 csInfo.id.as("stationId"),
                 csInfo.stationName.as("stationName"),
                 csInfo.address.as("address"),
-                csInfo.addressDetail.as("addressDetail"),
+                Expressions.stringTemplate("IF({0} IS NULL OR {0} = '', '정보없음', {0})", csInfo.addressDetail).as("addressDetail"),
                 csInfo.latitude.as("latitude"),
                 csInfo.longitude.as("longitude"),
-                Expressions.stringTemplate("IF({0}  = 'Y', '유료', '무료')", csInfo.parkingFeeYn).as("parkingFee"),
+                Expressions.stringTemplate("IF({0}  = 'Y', '유료', '무료')", csInfo.parkingFeeYn).as("parkingFeeYn"),
                 csInfo.openStartTime.as("openStartTime"),
-                csInfo.openEndTime.as("openEndTime")))
+                csInfo.openEndTime.as("openEndTime"),
+                opStatusCode.name.as("opStatus")))
                 .from(csInfo)
+                .leftJoin(opStatusCode).on(csInfo.opStatus.eq(opStatusCode.commonCode))
                 .where(csInfo.id.eq(stationId))
                 .fetchOne();
         return dto;

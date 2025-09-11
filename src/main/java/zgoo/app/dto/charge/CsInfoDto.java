@@ -32,7 +32,6 @@ public class CsInfoDto {
     @ToString(callSuper = true)
     public static class CsInfoDetailDto extends CsInfoBaseDto {
         private String opStatus;
-        private String opStatusName;
         private String parkingFeeYn;
         private String address;
         private String addressDetail;

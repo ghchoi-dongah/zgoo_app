@@ -19,6 +19,32 @@
 
     <div th:replace="~{fragments/nav :: navFragment}"></div>
 
+    <div id="stationDetail" class="station-detail" style="display: none;">
+        <div id="slidebar" class="slidebar"></div>
+        <div class="station-content">
+            <div>
+                <p class="font-m ps-4 position-relative">
+                    <i id="favStar" class="bi bi-star" style="position: absolute; top: 0; left: 0;" role="button" aria-label="즐겨찾기"></i>
+                    <span id="stationName"></span>
+                    <input id="stationId" hidden>
+                </p>
+                <p class="font-s ps-4"></p><hr>
+            </div>
+            <div id="stationContainer" class="row row-cols-w font-s">
+                <div class="col-4 mb-2">주소</div>
+                <div class="col-8" id="address"></div>
+                <div class="col-4  mb-2">상세주소</div>
+                <div class="col-8" id="addressDetail"></div>
+                <div class="col-4  mb-2">운영상태</div>
+                <div class="col-8" id="opStatus"></div>
+                <div class="col-4  mb-2">운영시간</div>
+                <div class="col-8" id="opTime"></div>
+                <div class="col-4  mb-2">주차요금</div>
+                <div class="col-8" id="parkingFee"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="filterSetting" class="top-layer">
         <div class="container">
             <div class="mem-header">
@@ -239,6 +265,5 @@
             document.getElementById('filterSetting').style.display = 'block';
         });
     </script>
-
 </div>
 </html>
